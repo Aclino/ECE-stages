@@ -1,0 +1,80 @@
+* {
+    margin: 0px;
+}
+
+body {
+    font-family: 'Monrope', sans-serif;
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2em;
+}
+
+h2 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1.5em;
+}
+
+h3 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1em;    
+}
+
+h4 {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.8em;   
+}
+
+main {
+    display:grid;
+    height: 100vh;
+    grid-template-columns: 1fr 3fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+}
+
+.infos {
+    background-color:skyblue;
+    grid-column: 1/2;
+    grid-row: 1/5;   
+    padding: 5%;
+}
+
+.question {
+    background-color: #7779a6;
+    grid-column: 2/3;
+    grid-row: 1/5;
+
+    display: grid;
+    grid-template-columns: repeat(11, 1fr);
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    
+}
+
+.enonce{
+    text-align: center;
+    padding: 5%;
+    grid-column: 2/11;
+    grid-row: 1/2;
+}
+
+.reponse {
+    margin: 5%;
+    grid-column: 5/8;
+    grid-row: 2/3;
+}
+
+.bulle-texte{
+    text-align: center;
+}
+
+.send_button{
+    
+}
+.correction{
+    grid-column: 4/9;
+    grid-row: 3/4;
+}
+
+
+

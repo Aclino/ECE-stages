@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+
+        <meta charset="utf-8">
+        <title>Chapitre blabla</title>
+        <link href = "style.css" rel = "stylesheet"/>
+        <link href = "universal.css" rel = "stylesheet"/>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    </head>
+    <body>
+
+        <header>
+            <div class="navbar">
+                <div class="logo">
+                    <a href = "aceuil.html"><img src="images/ECE_LOGO.png" alt="Logo ECE"></a>
+                </div>
+                <div class="menu">
+                   
+                </div>
+            </div>
+        </header> 
+        
+        <main>
+            <section class = "infos">
+                <h1>Matière</h1>
+                <h2>Chapitre</h2>
+                <h3>Compétences</h3>
+                <p>Progression (barre)</p>
+            </section>        
+
+            <section class = "question">
+                <div class = "enonce">
+                    <h2>1 - Quelle est la capitale de la France ?</h2>
+                    <h4>Choix multiples</h4>
+                </div>
+                
+                <div class = "reponse">
+                    <div class = "choix-unique" style = "display : none">
+                        <form action="" method="get">
+                            <label>
+                                <input type="radio" name="question1" value="Paris" required> Paris
+                            </label><br>
+                            <label>
+                                <input type="radio" name="question1" value="Londres"> Londres
+                            </label><br>
+                            <label>
+                                <input type="radio" name="question1" value="Berlin"> Berlin
+                            </label>
+                            <input class = "send-button" type="submit" value="Envoyer">
+                        </form>
+                        <a class = "question-suivante" href="">Question suivante</a> 
+                    </div>
+        
+                    <div class = "choix-multiples" style="display: block">
+                        <form action="" method="get">
+                            <label>
+                                <input type="checkbox" name="question1" value="Paris">Paris
+                            </label><br>
+                            <label>
+                                <input type="checkbox" name="question1" value="Londres">Londres
+                            </label><br>
+                            <label>
+                                <input type="checkbox" name="question1" value="Berlin">Berlin
+                            </label>
+
+                            <br><br>
+
+                            <input class = "send-button" type="submit" value="Envoyer">
+                        </form>
+                    </div>
+        
+                    <div class = "bulle-texte" style="display: none">
+                        <form action="" method ="get">
+                            <input type = "text" placeholder="Votre réponse">
+                            <input class = "send-button" type = "submit" value = "Envoyer">
+                        </form>
+                    </div>
+                </div>
+
+                                                
+                <div class = "correction">
+                    <p>
+                        c'etait bon parce que blablablou et ca cetait faux car blablablablablou shdis hd qkhsd khz doiahzdoic uabhiudhc qishdcoiqhdbcoiazbcoai.
+                 </p>
+                </div>
+
+            </section>
+
+            
+
+            
+            
+        </main>
+
+
+        <footer>
+            <nav>
+                <ul>
+                    <li><a href="#about">À Propos</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="#news">Actualités</a></li>
+                </ul>
+            </nav>
+        </footer>
+
+        </body>
+</html>
