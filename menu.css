@@ -1,0 +1,89 @@
+/* Style général */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f4f4f4;
+}
+
+.menu {
+    font-size: 18px;
+    margin: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Styles pour les éléments principaux */
+.menu-item > span {
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    display: inline-block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.menu-item > span:hover {
+    background-color: #0056b3;
+}
+
+/* Sous-menus */
+.submenu {
+    display: none;
+    position: relative;
+    margin-top: 10px;
+}
+
+.submenu-item > span {
+    cursor: pointer;
+    background-color: #e3e3e3;
+    color: black;
+    padding: 8px 15px;
+    display: inline-block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.submenu-item > span:hover {
+    background-color: #c3c3c3;
+}
+
+/* Contenu des sous-menus */
+.submenu-content {
+    display: none;
+    margin-top: 10px;
+    padding-left: 20px;
+}
+
+.submenu-content li a {
+    text-decoration: none;
+    color: black;
+    padding: 8px;
+    display: block;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.submenu-content li a:hover {
+    background-color: #f1f1f1;
+}
+
+/* Sous-menus avec transition */
+.submenu,
+.submenu-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+/* Classe active pour afficher les sous-menus */
+.submenu.open,
+.submenu-content.open {
+    display: block;
+    max-height: 500px; /* Ajustez selon la taille maximale attendue */
+}

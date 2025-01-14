@@ -1,0 +1,93 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  .container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+  }
+  
+  header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .logo {
+    max-width: 80px;
+    display: block;
+    margin: 0 auto 10px;
+  }
+  
+  h1 {
+    font-size: 1.5em;
+    color: #2b579a;
+  }
+  
+  .form label {
+    display: block;
+    font-weight: bold;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #333;
+  }
+  
+  .form input {
+    width: 100%;
+    padding: 10px;
+    font-size: 0.9em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form input:focus {
+    border-color: #2b579a;
+    outline: none;
+  }
+  
+  .btn-submit {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: #2b579a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    cursor: pointer;
+  }
+  
+  .btn-submit:hover {
+    background-color: #244b84;
+  }
+  
+  .login-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.85em;
+  }
+  
+  .login-link a {
+    color: #2b579a;
+    text-decoration: none;
+  }
+  
+  .login-link a:hover {
+    text-decoration: underline;
+  }
+  
