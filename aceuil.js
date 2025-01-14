@@ -53,8 +53,6 @@ async function fetchAndDisplayData() {
             li.innerHTML = `<span>${matiere.nom} ▼</span>`;
             matiereMenu.appendChild(li);
         });
-
-        // Affichage des chapitres
         data.chapitres.forEach((chapitre) => {
             const li = document.createElement('li');
             li.classList.add('submenu-item');
@@ -69,6 +67,17 @@ async function fetchAndDisplayData() {
             li.innerHTML = `<span>${competence.nom}</span>`;
             competenceMenu.appendChild(li);
         });
+        
+        data.joins.forEach(()=>{
+            if (chapitre.id_matiere==matiere.id_matiere){
+                const li = document.createElement('li');
+                li.classList.add('submenu-item');
+                li.innerHTML = `<span>${chapitre.nom} ▼</span>`;
+                chapitreMenu.appendChild(li);
+            }
+        });
+        // Affichage des chapitres
+
 
     } catch (error) {
         console.error("Erreur lors de l'affichage des données :", error);
@@ -77,6 +86,5 @@ async function fetchAndDisplayData() {
 
 // Charger les données au chargement de la page
 document.addEventListener('DOMContentLoaded', fetchAndDisplayData);
-
 
 

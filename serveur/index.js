@@ -27,15 +27,18 @@ app.get('/api/matiere', async (req, res) => {
         const queryComp = 'SELECT * FROM competence.competence';
         const resultComp = await pool.query(queryComp);
 
+       const queryJoin = 'SELECT c.id_competence,c.nom AS competence_nom,c.description AS competence_description,c.ordre AS competence_ordre,ch.id_chapitre,ch.nom AS chapitre_nom,ch.description AS chapitre_description,ch.ordre AS chapitre_ordre,m.id_matiere,m.nom AS matiere_nom FROM competence.competence c INNER JOIN competence.chapitre ch ON c.id_chapitre = ch.id_chapitre INNER JOIN competence.matiere m ON ch.id_matiere = m.id_matiere';
+        const resultJoin = await pool.query(queryJoin);
+
         // Envoyer une réponse combinée au frontend
         res.json({
             matieres: resultMat.rows,
             chapitres: resultChap.rows,
             competences: resultComp.rows,
+            joins: resultJoin.rows,
         });
     } catch (err) {
         console.error("Erreur interne :", err);
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
-}); 
-
+});
