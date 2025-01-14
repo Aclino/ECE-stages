@@ -1,0 +1,287 @@
+
+CREATE TABLE Status (
+    id_status INT PRIMARY KEY,
+    nom VARCHAR(100)
+);
+
+CREATE TABLE Role (
+    id_role INT PRIMARY KEY,
+    nom VARCHAR(100)
+);
+CREATE TABLE Matiere (
+    id_matiere INT PRIMARY KEY,
+    nom VARCHAR(100)
+);
+
+CREATE TABLE Question_type (
+    id_question_type INT PRIMARY KEY,
+    nom VARCHAR(100)
+);
+
+CREATE TABLE Poids (
+    id_poids INT PRIMARY KEY,
+    nom VARCHAR(100),
+    valeur INT
+);
+
+CREATE TABLE Chapitre (
+    id_chapitre INT PRIMARY KEY,
+    nom VARCHAR(100),
+    ordre INT,
+    description VARCHAR(1000),
+    id_matiere INT,
+    FOREIGN KEY (id_matiere) REFERENCES Matiere(id_matiere)
+);
+
+CREATE TABLE Competence (
+    id_competence INT PRIMARY KEY,
+    nom VARCHAR(100),
+    ordre INT,
+    description VARCHAR(100),
+    id_chapitre INT,
+    id_poids INT,
+    FOREIGN KEY (id_chapitre) REFERENCES Chapitre(id_chapitre),
+    FOREIGN KEY (id_poids) REFERENCES Poids(id_poids)
+);
+
+CREATE TABLE Question (
+    id_question INT PRIMARY KEY,
+    nom VARCHAR(100),
+    enoncer VARCHAR(100),
+    id_competence INT,
+    id_poids INT,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
+    FOREIGN KEY (id_poids) REFERENCES Poids(id_poids)
+);
+
+CREATE TABLE Reponse (
+    reponse VARCHAR(100),
+    explication VARCHAR(100),
+    id_question INT,
+    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+);
+CREATE TABLE Question_assignement (
+    id_competence INT,
+    id_question INT,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
+    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+);
+
+CREATE TABLE Proposition (
+    id_proposition INT PRIMARY KEY,
+    enoncer VARCHAR(100),
+    explication VARCHAR(100),
+    est_correcte BOOL,
+    id_question INT,
+    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+);
+
+CREATE TABLE Tentative (
+    id_tentative INT PRIMARY KEY,
+    tentative_date date,
+    enoncer VARCHAR(100),
+    id_utilisateur INT,
+    id_question INT,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
+    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+);
+
+CREATE TABLE Tentative_assignement (
+    id_tentative INT,
+    id_proposition INT,
+    FOREIGN KEY (id_tentative) REFERENCES Tentative(id_tentative),
+    FOREIGN KEY (id_proposition) REFERENCES Proposition(id_proposition)
+);
+
+CREATE TABLE Fichier (
+    nom VARCHAR(100),
+    contenu VARCHAR(100),
+    id_question INT,
+    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+);
+
+CREATE TABLE Email_verification (
+    id_utilisateur INT,
+    id_question INT,
+    FOREIGN KEY (id_utilisateur) REFERENCES Competence(id_competence),
+    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+);
+CREATE TABLE Role_assignement (
+    id_role INT,
+    id_utilisateur INT,
+    FOREIGN KEY (id_role) REFERENCES Role(id_role),
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+);
+
+CREATE TABLE Utilisateur_assignement (
+    id_promotion INT,
+    id_utilisateur INT,
+    FOREIGN KEY (id_promotion) REFERENCES Promotion(id_promotion),
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+);
+
+CREATE TABLE PromoMatiere_assignement (
+    id_promotion INT,
+    id_matiere INT,
+    FOREIGN KEY (id_promotion) REFERENCES Promotion(id_promotion),
+    FOREIGN KEY (id_matiere) REFERENCES Matiere(id_matiere)
+);
+
+CREATE TABLE Evaluation_auto (
+    id_utilisateur INT,
+    id_competence INT,
+    id_status INT,
+    evaluation_auto_date date,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
+    FOREIGN KEY (id_status) REFERENCES Status(id_status)
+);
+
+CREATE TABLE Auto_evaluation (
+    id_utilisateur INT,
+    id_competence INT,
+    id_status INT,
+    auto_evaluation_date date,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
+    FOREIGN KEY (id_status) REFERENCES Status(id_status)
+);
+-- Insertion of example data for the tables
+
+-- Table Utilisateur
+INSERT INTO Utilisateur (id_utilisateur, nom, email, mot_de_passe, actif) VALUES
+(1, 'Alice Dupont', 'alice@example.com', 'password123', true),
+(2, 'Bob Martin', 'bob@example.com', 'securepass', true),
+(3, 'Charlie Durant', 'charlie@example.com', 'mypassword', false);
+
+-- Table Promotion
+INSERT INTO Promotion (id_promotion, nom, annee, code_inscription) VALUES
+(1, 'Promo 2025', 2025, 12345),
+(2, 'Promo 2024', 2024, 67890);
+
+-- Table Status
+INSERT INTO Status (id_status, nom) VALUES
+(1, 'En cours'),
+(2, 'Acquis'),
+(3, 'Non acquis');
+
+-- Table Role
+INSERT INTO Role (id_role, nom) VALUES
+(1, 'Admin'),
+(2, 'Etudiant'),
+(3, 'Enseignant');
+
+-- Table Matiere
+INSERT INTO Matiere (id_matiere, nom) VALUES
+(1, 'Mathématiques'),
+(2, 'Physique'),
+(3, 'Informatique');
+
+-- Table Question_type
+INSERT INTO Question_type (id_question_type, nom) VALUES
+(1, 'QCM'),
+(2, 'Vrai/Faux'),
+(3, 'Réponse ouverte');
+
+-- Table Poids
+INSERT INTO Poids (id_poids, nom, valeur) VALUES
+(1, 'Faible', 1),
+(2, 'Moyen', 2),
+(3, 'Élevé', 3);
+
+-- Table Chapitre
+INSERT INTO Chapitre (id_chapitre, nom, ordre, description, id_matiere) VALUES
+(1, 'Algebre', 1, 'Introduction à l algebre',1),
+(2, 'Mécanique', 2, 'Introduction à la mécanique', 2);
+
+-- Table Competence
+INSERT INTO Competence (id_competence, nom, ordre, description, id_chapitre, id_poids) VALUES
+(1, 'Résolution déquations', 1, 'Savoir résoudre des équations', 1, 2),
+(2, 'Loi de Newton', 1, 'Comprendre la loi de Newton', 2, 3);
+
+-- Table Question
+INSERT INTO Question (id_question, nom, enoncer, id_competence, id_poids) VALUES
+(1, 'Équation simple', 'Résolvez 2x + 3 = 7', 1, 2),
+(2, 'Force et masse', 'Quelle est la force exercée sur un objet de 10kg soumis à une accélération de 2m/s^2?', 2, 3);
+
+-- Table Reponse
+INSERT INTO Reponse (reponse, explication, id_question) VALUES
+('x = 2', 'On soustrait 3 puis divise par 2', 1),
+('20N', 'La force est calculée avec F=ma', 2);
+
+-- Table Question_assignement
+INSERT INTO Question_assignement (id_competence, id_question) VALUES
+(1, 1),
+(2, 2);
+
+-- Table Proposition
+INSERT INTO Proposition (id_proposition, enoncer, explication, est_correcte, id_question) VALUES
+(1, 'x = 2', 'Bonne réponse', true, 1),
+(2, 'x = 3', 'Mauvaise réponse', false, 1),
+(3, '20N', 'Bonne réponse', true, 2),
+(4, '15N', 'Mauvaise réponse', false, 2);
+
+-- Table Tentative
+INSERT INTO Tentative (id_tentative, tentative_date, enoncer, id_utilisateur, id_question) VALUES
+(1, '2025-01-01', 'Essai sur équation', 1, 1),
+(2, '2025-01-02', 'Essai sur mécanique', 2, 2);
+
+-- Table Tentative_assignement
+INSERT INTO Tentative_assignement (id_tentative, id_proposition) VALUES
+(1, 1),
+(2, 3);
+
+-- Table Fichier
+INSERT INTO Fichier (nom, contenu, id_question) VALUES
+('equation_guide.pdf', 'Guide de résolution des équations', 1),
+('mecanique_notes.pdf', 'Notes sur la mécanique', 2);
+
+-- Table Email_verification
+-- Note: Foreign key references corrected to point to Utilisateur
+INSERT INTO Email_verification (id_utilisateur, id_question) VALUES
+(1, 1),
+(2, 2);
+
+-- Table Role_assignement
+INSERT INTO Role_assignement (id_role, id_utilisateur) VALUES
+(1, 1),
+(2, 2),
+(3, 3);
+
+-- Table Utilisateur_assignement
+INSERT INTO Utilisateur_assignement (id_promotion, id_utilisateur) VALUES
+(1, 1),
+(2, 2);
+
+-- Table PromoMatiere_assignement
+INSERT INTO PromoMatiere_assignement (id_promotion, id_matiere) VALUES
+(1, 1),
+(1, 2);
+
+-- Table Evaluation_auto
+INSERT INTO Evaluation_auto (id_utilisateur, id_competence, id_status, evaluation_auto_date) VALUES
+(1, 1, 2, '2025-01-10'),
+(2, 2, 1, '2025-01-11');
+
+-- Table Auto_evaluation
+INSERT INTO Auto_evaluation (id_utilisateur, id_competence, id_status, auto_evaluation_date) VALUES
+(1, 1, 2, '2025-01-12'),
+(2, 2, 3, '2025-01-13');
+SELECT
+    c.id_competence,
+    c.nom AS competence_nom,
+    c.description AS competence_description,
+    c.ordre AS competence_ordre,
+    ch.id_chapitre,
+    ch.nom AS chapitre_nom,
+    ch.description AS chapitre_description,
+    ch.ordre AS chapitre_ordre,
+    m.id_matiere,
+    m.nom AS matiere_nom
+FROM
+    Competence c
+INNER JOIN
+    Chapitre ch ON c.id_chapitre = ch.id_chapitre
+INNER JOIN
+    Matiere m ON ch.id_matiere = m.id_matiere;
+
