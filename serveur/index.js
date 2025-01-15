@@ -33,8 +33,6 @@ app.get('/api/matiere', async (req, res) => {
         // Envoyer une réponse combinée au frontend
         res.json({
             matieres: resultMat.rows,
-            chapitres: resultChap.rows,
-            competences: resultComp.rows,
             joins: resultJoin.rows,
         });
     } catch (err) {
