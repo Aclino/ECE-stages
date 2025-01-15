@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="fr">
     <head>
-
         <meta charset="utf-8">
-        <title>Chapitre blabla</title>
-        <link href = "style.css" rel = "stylesheet"/>
+        <title>Exercice - Matière: Chapitre</title>
+        <link href = "exo.css" rel = "stylesheet"/>
         <link href = "universal.css" rel = "stylesheet"/>
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+        <script src="exo.js"></script>
     </head>
     <body>
 
@@ -39,48 +39,40 @@
                 </div>
                 
                 <div class = "reponse">
-                    <div class = "choix-unique" style = "display : none">
-                        <form action="" method="get">
-                            <label>
-                                <input type="radio" name="question1" value="Paris" required> Paris
-                            </label><br>
-                            <label>
-                                <input type="radio" name="question1" value="Londres"> Londres
-                            </label><br>
-                            <label>
-                                <input type="radio" name="question1" value="Berlin"> Berlin
-                            </label>
-                            <input class = "send-button" type="submit" value="Envoyer">
-                        </form>
-                        <a class = "question-suivante" href="">Question suivante</a> 
-                    </div>
+                    <form id = "choix-unique" action="" method="get" >
+                        <label>
+                            <input type="radio" name="question1" value="Paris" required> Paris
+                        </label><br>
+                        <label>
+                            <input type="radio" name="question1" value="Londres"> Londres
+                        </label><br>
+                        <label>
+                            <input type="radio" name="question1" value="Berlin"> Berlin
+                        </label>
+                    </form> 
         
-                    <div class = "choix-multiples" style="display: block">
-                        <form action="" method="get">
-                            <label>
-                                <input type="checkbox" name="question1" value="Paris">Paris
-                            </label><br>
-                            <label>
-                                <input type="checkbox" name="question1" value="Londres">Londres
-                            </label><br>
-                            <label>
-                                <input type="checkbox" name="question1" value="Berlin">Berlin
-                            </label>
-
-                            <br><br>
-
-                            <input class = "send-button" type="submit" value="Envoyer">
-                        </form>
-                    </div>
+                    <form id = "choix-multiples" action="" method="get" style = "display: none;">
+                        <label>
+                            <input type="checkbox" name="question1" value="Paris"> Paris
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="question1" value="Londres"> Londres
+                        </label><br>
+                        <label>
+                            <input type="checkbox" name="question1" value="Berlin"> Berlin
+                        </label>
+                    </form>
         
-                    <div class = "bulle-texte" style="display: none">
-                        <form action="" method ="get">
-                            <input type = "text" placeholder="Votre réponse">
-                            <input class = "send-button" type = "submit" value = "Envoyer">
-                        </form>
-                    </div>
+                    <form id = "bulle-texte" action= "" method = "get" style = "display: none;">
+                        <input type = "text" placeholder="Votre réponse">
+                    </form>
                 </div>
 
+                <button class = "send-button" type = "submit" form = "choix-unique" style = "display: block;"><h3>Valider</h3></button>
+                <button class = "send-button" type = "submit" form = "choix-multiples" style = "display: none;"><h3>Valider</h3></button>
+                <button class = "send-button" type = "submit" form = "bulle-texte" style = "display: none;"><h3>Valider</h3></button>
+
+                <a class = "question-suivante" href=""> <h3>Question suivante</h3></a>
                                                 
                 <div class = "correction">
                     <p>
