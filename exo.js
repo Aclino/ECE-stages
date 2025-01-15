@@ -1,3 +1,35 @@
+// document.addEventListener("DOMContentLoaded", function () {
+//     const validerButtons = document.querySelectorAll(".send-button");
+//     const questionSuivante = document.querySelector(".question-suivante");
+
+//     validerButtons.forEach((button) => {
+//         button.addEventListener("click", function (event) {
+//             event.preventDefault(); // On empêche le rechargement
+
+//             const formId = button.getAttribute("form"); // Récupère l'ID du formulaire
+//             const form = document.getElementById(formId); // Sélectionne le formulaire
+//             const correction = document.querySelector(".correction");
+
+//             if (form) {
+//                 const formData = new FormData(form); // Récupère les données du formulaire
+
+//                 // Simule l'envoi des données
+//                 console.log("Données du formulaire envoyées :");
+//                 for (let [key, value] of formData.entries()) {
+//                     console.log(key, value);
+//                 }
+
+//                 // Si tout va bien, on cache les boutons "Valider"
+//                 validerButtons.forEach((btn) => (btn.style.display = "none"));
+//                 questionSuivante.style.display = "block";
+//                 correction.style.display = "block";
+//             } else {
+//                 console.error("Formulaire introuvable pour le bouton !");
+//             }
+//         });
+//     });
+// });
+
 document.addEventListener("DOMContentLoaded", function () {
     const validerButtons = document.querySelectorAll(".send-button");
     const questionSuivante = document.querySelector(".question-suivante");
