@@ -24,15 +24,23 @@
   header {
     text-align: center;
     margin-bottom: 20px;
+    display: grid;
+    grid-template-areas: "ece vide vide"
+                          "ins ins ins";
   }
   
   .logo {
-    max-width: 80px;
-    display: block;
-    margin: 0 auto 10px;
+    max-width: 40%;
+    text-align: right;
+    margin:  0px 0px 0px 0px;
   }
-  
+  img{
+    grid-area: ece;
+    text-align: right;
+    margin:  1000px 0px 0px 0px;
+  }
   h1 {
+    grid-area: ins;
     font-size: 1.5em;
     color: #2b579a;
   }
@@ -90,4 +98,9 @@
   .login-link a:hover {
     text-decoration: underline;
   }
-  
+  /* Utilisation d'un fond avec des couleurs et motifs inspirés de l'ECE */
+body {
+  background-color: #001f3d; /* Bleu sombre (couleur générale de l'ECE) */
+
+}
+
