@@ -1,84 +1,174 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const validerButtons = document.querySelectorAll(".send-button");
-    const questionSuivante = document.querySelector(".question-suivante");
+//choisir le type de reponse attendue : 1 pour QCU 2 pour QCM 3 pour Question ouverte
+let currentQuestionMode = 2
 
-    validerButtons.forEach((button) => {
-        button.addEventListener("click", function (event) {
-            event.preventDefault(); // On empêche le rechargement
+//les 3 formulaires possibles
+const choixUniqueForm = document.getElementById("choix-unique")
+const choixMultiplesForm = document.getElementById("choix-multiples")
+const questionOuverteForm = document.getElementById("bulle-texte")
 
-            const formId = button.getAttribute("form"); // Récupère l'ID du formulaire
-            const form = document.getElementById(formId); // Sélectionne le formulaire
-            const correction = document.querySelector(".correction");
+//les 3 types d'inputs possibles
+let reponsesQCU = document.querySelectorAll("input[type = radio]")
+let reponsesQCM = document.querySelectorAll("input[type = checkbox]")
+let reponseQO = document.querySelectorAll("input[type = text]")
 
-            if (form) {
-                const formData = new FormData(form); // Récupère les données du formulaire
+//les 3 boutons d'envoi possibles
+const QCUSendBtn = document.getElementById("choix-unique-btn")
+const QCMSendBtn = document.getElementById("choix-multiples-btn")
+const QOSendBtn = document.getElementById("question-ouverte-btn")
 
-                // Simule l'envoi des données
-                console.log("Données du formulaire envoyées :");
-                for (let [key, value] of formData.entries()) {
-                    console.log(key, value);
+//correction et question suivante
+const btnQuestionSuivante = document.querySelector(".question-suivante")
+const correction = document.querySelector(".correction")
+
+//on prend les variables dont on a besoin en fonction de currentQuestionMode
+let currentForm = choixUniqueForm
+let currentBtn = QCUSendBtn
+let currentAnswers = reponsesQCU
+
+const indicationQCU = document.querySelector(".une-reponse")
+const indicationQCM = document.querySelector(".plusieurs-reponses")
+
+switch (currentQuestionMode){
+    case 1:
+        choixUniqueForm.style.display = "block"
+        choixMultiplesForm.style.display = "none"
+        questionOuverteForm.style.display = "none"
+
+        QCUSendBtn.style.display = "block"
+        QCMSendBtn.style.display = "none"
+        QOSendBtn.style.display = "none"
+
+        currentForm = choixUniqueForm
+        currentBtn = QCUSendBtn
+        currentAnswers = reponsesQCU
+
+        indicationQCU.style.display = "block"
+        indicationQCM.style.display = "none"
+        break
+    case 2:
+        choixUniqueForm.style.display = "none"
+        choixMultiplesForm.style.display = "block"
+        questionOuverteForm.style.display = "none"
+
+        QCUSendBtn.style.display = "none"
+        QCMSendBtn.style.display = "block"
+        QOSendBtn.style.display = "none"
+
+        currentForm = choixMultiplesForm
+        currentBtn = QCMSendBtn
+        currentAnswers = reponsesQCM
+
+        indicationQCU.style.display = "none"
+        indicationQCM.style.display = "block"
+        break
+    case 3:
+        choixUniqueForm.style.display = "none"
+        choixMultiplesForm.style.display = "none"
+        questionOuverteForm.style.display = "block"
+
+        QCUSendBtn.style.display = "none"
+        QCMSendBtn.style.display = "none"
+        QOSendBtn.style.display = "block"
+
+        currentForm = questionOuverteForm
+        currentBtn = QOSendBtn
+        currentAnswers = reponseQO
+
+        indicationQCU.style.display = "none"
+        indicationQCM.style.display = "none"
+        break
+    default:
+        choixUniqueForm.style.display = "none"
+        choixMultiplesForm.style.display = "none"
+        questionOuverteForm.style.display = "none"
+
+        QCUSendBtn.style.display = "none"
+        QCMSendBtn.style.display = "none"
+        QOSendBtn.style.display = "block"
+
+        indicationQCU.style.display = "none"
+        indicationQCM.style.display = "none"
+
+        break
+}
+
+function envoyerFormulaire(btnQuestionSuivante, correction, currentAnswers){
+    btnQuestionSuivante.style.display = "block"
+    correction.style.display = "block"
+}
+
+function afficherReponses(currentAnswers, currentQuestionMode){
+    let answerIsValid = false
+    switch (currentQuestionMode){
+        case 1: //radio answers
+            for (let i = 0; i < currentAnswers.length; i++){
+                if (currentAnswers[i].checked){
+                    console.log(currentAnswers[i].value)
+                    answerIsValid = true
                 }
-
-                // Si tout va bien, on cache les boutons "Valider"
-                validerButtons.forEach((btn) => (btn.style.display = "none"));
-                questionSuivante.style.display = "block";
-                correction.style.display = "block";
-            } else {
-                console.error("Formulaire introuvable pour le bouton !");
             }
+            break
+        case 2: //checkbox answers
+            for (let i = 0; i < currentAnswers.length; i ++){
+                if (currentAnswers[i].checked){
+                    console.log(currentAnswers[i].value)
+                    answerIsValid = true
+                }
+            }
+            break
+        case 3: //question ouverte
+            for (let i = 0; i < currentAnswers.length; i ++){
+                if (currentAnswers[i].value !== ""){
+                    console.log(currentAnswers[i].value)
+                    answerIsValid = true
+                }
+            }
+            break
+        default:
+            break
+    }
+
+    return answerIsValid
+}
+
+currentForm.addEventListener("submit", (event) => {
+    const messageErreur = document.querySelector(".erreur-reponse")
+    event.preventDefault()
+    if (afficherReponses(currentAnswers, currentQuestionMode)){
+        messageErreur.style.display = "none"
+        if (currentQuestionMode === 3){
+            const boiteDialogue = document.getElementById("questionOuverte-reponse")
+            boiteDialogue.value= ""
+        }
+
+        envoyerFormulaire(btnQuestionSuivante, correction)
+    } else {
+        messageErreur.style.display = "block"
+    }
+})
+
+// Initialiser le comportement du menu déroulant
+function initDropdownMenu() {
+    const profileIcon = document.getElementById('profileIcon');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+
+    if (profileIcon && dropdownMenu) {
+        // Afficher ou masquer le menu déroulant au clic sur l'icône
+        profileIcon.addEventListener('click', (event) => {
+            event.stopPropagation(); // Empêche la fermeture immédiate
+            const isDropdownVisible = dropdownMenu.style.display === 'block';
+            dropdownMenu.style.display = isDropdownVisible ? 'none' : 'block';
         });
-    });
-});
 
-// document.querySelectorAll('.send-button').forEach(button => {
-//     button.addEventListener('click', function (event) {
-//         // Récupère le formulaire lié au bouton
-//         const formId = button.getAttribute('form');
-//         const form = document.getElementById(formId);
-//         const correction = document.querySelector(".correction");
+        // Fermer le menu déroulant si on clique en dehors
+        window.addEventListener('click', () => {
+            dropdownMenu.style.display = 'none';
+        });
+    }
+}
 
-//         // Vérifie si une réponse est sélectionnée ou saisie
-//         let isValid = false;
+// Appeler la fonction au chargement de la page
+document.addEventListener('DOMContentLoaded', initDropdownMenu);
 
-//         if (form) {
-//             // Vérifie les types de champs
-//             const inputs = form.querySelectorAll('input');
-//             inputs.forEach(input => {
-//                 if (
-//                     (input.type === 'radio' || input.type === 'checkbox') && input.checked
-//                 ) {
-//                     isValid = true; // Un bouton est coché
-//                 } else if (input.type === 'text' && input.value.trim() !== '') {
-//                     isValid = true; // Un texte est saisi
-//                 }
-//             });
-//         }
-
-//         // Si aucune réponse, empêche l'envoi du formulaire et affiche un message
-//         if (!isValid) {
-//             event.preventDefault();
-//             alert('Veuillez répondre à la question avant de valider !');
-//             return;
-//         }
-
-//         // Si tout va bien, on continue
-//         event.preventDefault(); // Empêche le rechargement automatique
-//         button.style.display = 'none'; // Cache le bouton actuel
-//         correction.style.display = "block"; //Affiche la correction
-//         document.querySelector('.question-suivante').style.display = 'block'; // Affiche le bouton suivant
-//         console.log('Formulaire soumis avec succès !');
-//     });
-// });
-
-
-
-//Si tu tiens à envoyer le formulaire directement et à le laisser gérer 
-// tout seul son comportement, une autre approche serait d'attendre un court délai avant de cacher le bouton, comme ceci :
-// button.addEventListener("click", function (event) {
-//     setTimeout(() => {
-//         validerButtons.forEach((btn) => (btn.style.display = "none"));
-//         questionSuivante.style.display = "block";
-//     }, 100); // Attendre 100 ms
-// });
 
 

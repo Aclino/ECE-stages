@@ -4,20 +4,37 @@
         <meta charset="utf-8">
         <title>Exercice - Matière: Chapitre</title>
         <link href = "exo.css" rel = "stylesheet"/>
-        <link href = "universal.css" rel = "stylesheet"/>
+
 
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
-        <script src="exo.js"></script>
+        <script src="exo.js" defer></script>
     </head>
     <body>
 
         <header>
             <div class="navbar">
                 <div class="logo">
-                    <a href = "aceuil.html"><img src="images/ECE_LOGO.png" alt="Logo ECE"></a>
+                    <span class ="logo-menu">
+                        <a href = "accueil.html"><img src="images\home-icon.png" alt="Logo Menu"></a>
+                    </span>
+                    <span class = "logo-ece">
+                         <a href = "accueil.html"><img src="images\ECE_LOGO.png" alt="Logo ECE"></a>
+                    </span>
+                    <span class = "logo-utilisateur">
+                        <img src="images\Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
+                         <div class="dropdown" id="dropdownMenu">
+                             <a href="profil.html">Profil</a>
+                             <a href="securite.html">Sécurité</a>
+                             <a href="accueil.html">Accueil</a>
+                             <a href="progression.html">Progression</a>
+                         </div>
+
+
+                    </span>
                 </div>
+
                 <div class="menu">
                    
                 </div>
@@ -35,44 +52,65 @@
             <section class = "question">
                 <div class = "enonce">
                     <h2>1 - Quelle est la capitale de la France ?</h2>
-                    <h4>Choix multiples</h4>
+                    <h4 class = "plusieurs-reponses">Plusieurs réponses possibles</h4>
+                    <h4 class = "une-reponse">Une seule réponse possible</h4>
+
+
                 </div>
                 
                 <div class = "reponse">
-                    <form id = "choix-unique" action="" method="get" >
-                        <label>
-                            <input type="radio" name="question1" value="Paris" required> Paris
-                        </label><br>
-                        <label>
-                            <input type="radio" name="question1" value="Londres"> Londres
-                        </label><br>
-                        <label>
-                            <input type="radio" name="question1" value="Berlin"> Berlin
+
+                    <form id = "choix-unique" action="" method="get">
+                        <label for = "radio-reponse1">
+                            <input type="radio" id = "radio-reponse1" name="question" value="Paris"> Paris
                         </label>
+                        <br>
+                        <label for = "radio-reponse2">
+                            <input type="radio" id ="radio-reponse2" name="question" value="Londres"> Londres
+                        </label>
+                        <br>
+                        <label for = "radio-reponse3">
+                            <input type="radio" id ="radio-reponse3" name="question" value="Berlin"> Berlin
+                        </label>
+                        <br>
+                        <label for = "radio-reponse4">
+                            <input type="radio" id ="radio-reponse4" name="question" value="Madrid"> Madrid
+                        </label>
+
                     </form> 
         
-                    <form id = "choix-multiples" action="" method="get" style = "display: none;">
+                    <form id = "choix-multiples" action="" method="get">
                         <label>
-                            <input type="checkbox" name="question1" value="Paris"> Paris
+                            <input type="checkbox" id = "checkbox-reponse1" name="question" value="Paris"> Paris
                         </label><br>
                         <label>
-                            <input type="checkbox" name="question1" value="Londres"> Londres
+                            <input type="checkbox" id = "checkbox-reponse2" name="question" value="Londres"> Londres
                         </label><br>
                         <label>
-                            <input type="checkbox" name="question1" value="Berlin"> Berlin
+                            <input type="checkbox" id = "checkbox-reponse3" name="question" value="Berlin"> Berlin
+                        </label>
+                        <br>
+                        <label>
+                            <input type="checkbox" id = "checkbox-reponse4" name="question" value="Madrid"> Madrid
                         </label>
                     </form>
         
-                    <form id = "bulle-texte" action= "" method = "get" style = "display: none;">
-                        <input type = "text" placeholder="Votre réponse">
-                    </form>
+                    <form id = "bulle-texte" action= "" method = "get">
+                        <div class = "dialogue">
+                            <input type = "text" id = "questionOuverte-reponse" placeholder="Votre réponse" size = "50">
+                        </div>
+                       </form>
                 </div>
 
-                <button class = "send-button" type = "submit" form = "choix-unique" style = "display: block;"><h3>Valider</h3></button>
-                <button class = "send-button" type = "submit" form = "choix-multiples" style = "display: none;"><h3>Valider</h3></button>
-                <button class = "send-button" type = "submit" form = "bulle-texte" style = "display: none;"><h3>Valider</h3></button>
+                <button class="send-button" id = "choix-unique-btn" type = "submit" form = "choix-unique"><h3>Valider</h3></button>
+                <button class="send-button" id = "choix-multiples-btn" type = "submit" form = "choix-multiples"><h3>Valider</h3></button>
+                <button class="send-button" id = "question-ouverte-btn" type = "submit" form = "bulle-texte"><h3>Valider</h3></button>
 
                 <a class = "question-suivante" href=""> <h3>Question suivante</h3></a>
+
+                <div class = "erreur-reponse">
+                    <h3>Veuillez selectionner une réponse</h3>
+                </div>
                                                 
                 <div class = "correction">
                     <p>
