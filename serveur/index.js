@@ -13,6 +13,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(PORT, () => {
     console.log(`Le serveur est démarré sur http://localhost:${PORT}`);
 });
+////////////////////////////////////////////////////////////////////////////////
 app.get('/api/matiere', async (req, res) => {
     try {
         // Requête pour récupérer toutes les matières
@@ -40,3 +41,38 @@ app.get('/api/matiere', async (req, res) => {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
+///////////////////////////////////////////////////////////////////////////////
+                        //Pour la page inscription//
+///////////////////////////////////////////////////////////////////////////////
+// Route pour ajouter un utilisateur
+app.post('/api/inscription', (req, res) => {
+    const { email, nom, prenom, code, password } = req.body;
+  
+    // Vérifier si l'email existe déjà dans la base de données
+    const checkEmailQuery = 'SELECT * FROM Utilisateur WHERE email = ?';
+    connection.query(checkEmailQuery, [email], (err, results) => {
+      if (err) {
+        res.status(500).json({ success: false, message: 'Erreur de vérification de l\'email' });
+        return;
+      }///////////////////////////////////PAS FINI/////////////////////////////////////
+  
+      if (results.length > 0) {
+        res.status(400).json({ success: false, message: 'Cet email est déjà utilisé' });
+        return;
+      }
+  
+      // Si l'email est unique, insérer l'utilisateur dans la base de données
+      const insertQuery = 'INSERT INTO Utilisateur (email, nom, prenom, code_inscription, mot_de_passe) VALUES (?, ?, ?, ?, ?)';
+      connection.query(insertQuery, [email, nom, prenom, code, password], (err, result) => {
+        if (err) {
+          res.status(500).json({ success: false, message: 'Erreur lors de l\'ajout de l\'utilisateur' });
+          return;
+        }
+  
+        res.status(200).json({ success: true, message: 'Utilisateur ajouté avec succès' });
+      });
+    });
+  });
+///////////////////////////////////////////////////////////////////////////////
+                        //Pour la page connexion//
+///////////////////////////////////////////////////////////////////////////////

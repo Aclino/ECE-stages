@@ -1,4 +1,17 @@
+CREATE TABLE Utilisateur (
+    id_utilisateur INT PRIMARY KEY,
+    nom VARCHAR(100),
+    email VARCHAR(100),
+    mot_de_passe VARCHAR(100),
+    actif bool
+);
 
+CREATE TABLE Promotion (
+    id_promotion INT PRIMARY KEY,
+    nom VARCHAR(100),
+    annee INT,
+    code_inscription INT
+);
 CREATE TABLE Status (
     id_status INT PRIMARY KEY,
     nom VARCHAR(100)
