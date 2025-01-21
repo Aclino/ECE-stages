@@ -2,26 +2,44 @@
     <header>
         <div class="home-button">
             <a href="accueil.html">
-                <img src="" alt="Accueil" class="home-icon">
+                <img src="../images/home-icon.png" alt="Accueil" class="home-icon">
             </a>
         </div>
         <div class="logo">
-            <img src="../../" alt="Logo ECE">
+            <img src="../images/ECE_LOGO.png" alt="Logo ECE">
         </div>
         
-        <div class="profile">
-            <img src="../../images/Icone-profill.png" alt="Profil" class="profile-icon" id="profileIcon">
-            <div class="dropdown" id="dropdownMenu">
-                <a >Profil</a>
-                <a >Sécurité</a>
-                <a >Accueil</a>
-                <a >Progression</a>
+        <div 
+            class="profile"
+            @mouseover="showDropdown"
+            @mouseleave="hideDropdown"
+        >
+            <img src="../images/Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
+            <div v-show="isDropdownVisible" class="dropdown" id="dropdownMenu">
+               <a href="#">Profil</a>
+               <a href="#">Sécurité</a>
+            <a href="#">Accueil</a>
+              <a href="#">Progression</a>
             </div>            
         </div>
     </header>
 </template>
-<script>
+
+<script setup>
+
+import { ref } from 'vue';
+
+const isDropdownVisible = ref(false);
+
+function showDropdown() {
+    isDropdownVisible.value = true;
+}
+
+function hideDropdown() {
+    isDropdownVisible.value = false;
+}
 </script>
+
 <style>
 /* Réinitialisation des marges et paddings */
 * {
@@ -29,6 +47,7 @@
     padding: 0;
     box-sizing: border-box;
 }
+
 /* En-tête */
 header {
     place-self: top;
@@ -43,7 +62,6 @@ header {
 .logo {
     display: flex;
     align-items: center;
-    
 }
 
 .home-button {
@@ -57,8 +75,7 @@ header {
 }
 
 .logo img {
-    width: 200px;
-    height: 150px;
+    width: 85%;
     padding: 10px;
 }
 
@@ -78,24 +95,22 @@ header {
     position: absolute;
     top: 40px;
     right: 0;
-    background-color: #ffffff;
+    background-color: #007bff;
+    color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    display: none;
 }
 
 .dropdown a {
     display: block;
     padding: 10px;
     text-decoration: none;
-    color: #333;
+    color:white;
+    transition: background-color 0.5s ease;
 }
 
 .dropdown a:hover {
-    background-color: #f0f0f0;
+    background-color: #0056b3;
 }
-
-
-
 </style>
