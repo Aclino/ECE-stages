@@ -76,3 +76,27 @@ app.post('/api/inscription', (req, res) => {
 ///////////////////////////////////////////////////////////////////////////////
                         //Pour la page connexion//
 ///////////////////////////////////////////////////////////////////////////////
+
+
+
+                        //     Page exercices      //
+///////////////////////////////////////////////////////////////////////////////
+
+app.get('/api/exos',async(req, res) => {
+    try {
+        const queryExo = " SELECT q.id_question,q.nom AS question_nom, q.enoncer AS question_enoncer,qt.nom AS question_type,  m.nom AS matiere_nom,  c.nom AS chapitre_nom,  c.description AS chapitre_description,  p.enoncer AS proposition_enoncer,  p.explication AS proposition_explication,  p.est_correcte AS proposition_est_correcte, r.reponse AS reponse_correcte, r.explication AS reponse_explication, comp.nom AS competence_nom,  comp.description AS competence_description FROM competence.Question q JOIN competence.Question_type qt ON q.id_question_type = qt.id_question_type JOIN competence.Competence comp ON q.id_competence = comp.id_competence JOIN competence.Chapitre c ON comp.id_chapitre = c.id_chapitre JOIN competence.Matiere m ON c.id_matiere = m.id_matiere LEFT JOIN competence.Proposition p ON q.id_question = p.id_question LEFT JOIN competence.Reponse r ON q.id_question = r.id_question WHERE m.nom  ILIKE '%info%';"
+
+        const resultExo = await pool.query(queryExo)
+
+        res.json({
+            exo: resultExo.rows
+        })
+    } catch (err) {
+        console.error("Erreur interne :", err)
+        res.status(500).json({ error: 'Erreur interne du serveur' })
+    }
+})
+
+///////////////////////////////////////////////////////////////////////////////
+
+
