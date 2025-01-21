@@ -20,7 +20,7 @@ const increment = () => {
 <template>
 <headers/>
 <section>
-<div class="slide"></div>
+<div class="slide"><slidederoulant/></div>
 <div class="main"><deroulant /> </div>
  
 </section>
