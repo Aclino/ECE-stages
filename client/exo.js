@@ -116,7 +116,7 @@ function afficherCorrection(data, correction, btnQuestionSuivante, sendButton){
 
 async function recupDataExo(){
     try {
-        const response = await fetch('http://localhost:3021/api/exos')
+        const response = await fetch('http://localhost:3001/api/exos')
 
         if (!response.ok) throw new Error('Erreur lors de la récupération des données.')
 
@@ -139,7 +139,7 @@ async function recupDataExo(){
 
         let classEnonce = document.querySelector(".enonce")
         let enonce = `
-            <h2>${data.exo[0].question_nom} - ${data.exo[0].question_enoncer}</h2>
+            <h2>${data.exo[0].question_nom} - ${data.exo[0].question_enonce}</h2>
         `
         if (inputType === "radio"){
             enonce += `
@@ -159,7 +159,7 @@ async function recupDataExo(){
             for (let i = 0; i < data.exo.length; i++){
                 newForm += `
                 <label for = "reponse${i}">
-                    <input type = "${inputType}" id = "reponse${i}" name = "question" value = ""> ${data.exo[i].proposition_enoncer}
+                    <input type = "${inputType}" id = "reponse${i}" name = "question" value = ""> ${data.exo[i].proposition_enonce}
                 </label>
                 <br>
             `
@@ -169,7 +169,7 @@ async function recupDataExo(){
             for (let i = 0; i < data.exo.length; i++){
                 newForm += `
                 <label for = "reponse${i}">
-                    <input type = "${inputType}" id = "reponse${i}" name = "question" value = "${data.exo[i].proposition_enoncer}"> ${data.exo[i].proposition_enoncer}
+                    <input type = "${inputType}" id = "reponse${i}" name = "question" value = "${data.exo[i].proposition_enonce}"> ${data.exo[i].proposition_enonce}
                 </label>
                 <br>
             `
