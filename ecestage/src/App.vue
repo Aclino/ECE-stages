@@ -15,7 +15,9 @@ import slidederoulant from './components/slidederoulant.vue'
 <section>
 <div class="slide"><exoSlide/></div>
 <div class="main"><exo/></div>
- 
+<!-- <div class="slide"><slidederoulant/></div>
+<div class="main"><deroulant /> </div> -->
+
 </section>
 
 <footers/>
