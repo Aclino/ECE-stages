@@ -8,7 +8,7 @@ const joins = ref([]);    // Relations matière-chapitres-compétences
 // Fonction pour récupérer les données depuis l'API
 async function fetchAndDisplayData() {
   try {
-    const response = await fetch('http://localhost:3001/api/matiere', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/matiere`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
