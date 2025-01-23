@@ -5,7 +5,7 @@ Ce projet vise à développer un **site web** pour l'**ECE**, permettant d'éval
 ## Table des Matières
 
 1. [🎯 Objectifs](#-objectifs)
-2. [📝 Exercices types](#️-exercices-types)
+2. [📝 Exercices types](#-exercices-types)
 3. [📈 Progression des Étudiants](#-progression-des-étudiants)
 4. [🚀 Technologies Utilisées](#-technologies-utilisées)
 5. [📝 Comment Contribuer](#-comment-contribuer)
