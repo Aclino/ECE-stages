@@ -1,7 +1,8 @@
 CREATE TABLE Utilisateur (
     id_utilisateur SERIAL  PRIMARY KEY,
     nom VARCHAR(100),
-    email VARCHAR(100),
+    prenom VARCHAR(100)
+    email VARCHAR(100) unique,
     mot_de_passe VARCHAR(100),
     actif bool
 );
