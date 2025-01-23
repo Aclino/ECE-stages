@@ -116,22 +116,23 @@ onMounted(fetchAndDisplayData);
         <form @submit.prevent="onSubmit" v-if="currentQuestionMode === 1" id="form">
             <div v-for="reponse in reponses">
                 <label>
-                    <input type="radio" name="question" :value="reponse.proposition_enonce" v-model="userAnswers"> {{ reponse.proposition_enonce }}
+                    <input type="radio" name="question" :value="reponse.proposition_enonce" v-model="userAnswers" :disabled="showResult"> {{ reponse.proposition_enonce }}
                 </label>
             </div>
         </form>
         <form @submit.prevent="onSubmit" v-else-if="currentQuestionMode === 2" id="form">
             <div v-for="reponse in reponses">
                 <label>
-                    <input type="checkbox" name="question" :value="reponse.proposition_enonce" v-model="userAnswers"> {{ reponse.proposition_enonce }}
+                    <input type="checkbox" name="question" :value="reponse.proposition_enonce" v-model="userAnswers" :disabled="showResult"> {{ reponse.proposition_enonce }}
                 </label>
             </div>
         </form>
         <form @submit.prevent="onSubmit" v-else id="form" class ="OQ">
             <div v-for="reponse in reponses">
                 <label>
-                    Réponse : <input type="input" name="question" placeholder="Ex : 5" v-model="userAnswers">
+                    Réponse : <input type="input" name="question" placeholder="Ex : 5" v-model="userAnswers" :disabled="showResult">
                 </label>
+                <p v-if="showResult">La réponse était : {{ reponse.proposition_enonce }}</p>
             </div>
         </form>
         </div>
@@ -188,13 +189,15 @@ h4 {
 }
 
 .question {
-    background-color: #ffffff;
-    grid-column: 2/3;
-    grid-row: 1/5;
+  background-color: #ffffff;
+  grid-column: 2/3;
+  grid-row: 1/5;
 
-    display: grid;
-    grid-template-columns: repeat(11, 1fr);
-    grid-template-rows: 0.4fr 1fr 0.8fr 0.4fr 0.6fr;
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  
+  height: 78vh;
 }
 
 .enonce{
@@ -221,6 +224,12 @@ input{
     border-radius: 50px;
     padding: 5%;
     text-align: center;
+}
+
+.OQ p {
+  display: inline-block;
+  margin-left: 15px;
+  vertical-align: middle;
 }
 
 .send-button{

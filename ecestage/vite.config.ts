@@ -18,6 +18,6 @@ export default defineConfig({
     },
   },
   define: {
-    'import.meta.env.VITE_API_URL': JSON.stringify('http://localhost:3001'), // Définition de la variable d'environnement
+    'import.meta.env.VITE_API_URL': JSON.stringify('http://localhost:3001'),
   }
 })

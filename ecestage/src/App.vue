@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue';
 import deroulant from './components/deroulant.vue';
+import slidederoulant from './components/slidederoulant.vue'
 import exo from './components/exo.vue';
 import exoSlide from './components/exoSlide.vue';
 import headers from './components/headers.vue';
 import footers from './components/footers.vue';
-import slidederoulant from './components/slidederoulant.vue'
 </script>
 
 <template>
