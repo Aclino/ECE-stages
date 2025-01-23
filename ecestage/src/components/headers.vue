@@ -75,7 +75,7 @@ header {
 }
 
 .logo img {
-    width: 85%;
+    width: 30%;
     padding: 10px;
 }
 
