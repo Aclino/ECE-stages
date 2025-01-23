@@ -13,6 +13,7 @@ footer {
     color: white;
     padding: 10px 0;
     text-align: center;
+    height:5vh
 }
 
 footer nav ul {

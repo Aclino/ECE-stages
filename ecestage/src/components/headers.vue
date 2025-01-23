@@ -56,6 +56,7 @@ header {
     align-items: center;
     background-color: #f0f0f0;
     padding: 5px 20px;
+    height: 10vh;
 }
 
 /* Logo */
