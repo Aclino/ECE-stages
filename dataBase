@@ -1,7 +1,7 @@
 CREATE TABLE Utilisateur (
     id_utilisateur SERIAL  PRIMARY KEY,
     nom VARCHAR(100),
-    prenom VARCHAR(100)
+    prenom VARCHAR(100),
     email VARCHAR(100) unique,
     mot_de_passe VARCHAR(100),
     actif bool
@@ -165,6 +165,10 @@ CREATE TABLE Auto_evaluation (
 
 
 
+
+  
+
+
 INSERT INTO Question_type (nom)
 VALUES 
     ('QCM'),
@@ -220,5 +224,86 @@ VALUES
     INSERT INTO Proposition (enonce, explication, est_correcte, id_question)
 VALUES 
     ('11', 'Le résultat correct est obtenu grâce à la priorité des opérateurs : multiplication avant addition.', null, 3);
-    
-  
+ -- Ajout de données dans la table Utilisateur
+INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, actif)
+VALUES 
+    ('Dupont', 'Jean', 'jean.dupont@example.com', 'password123', TRUE),
+    ('Martin', 'Sophie', 'sophie.martin@example.com', 'sophie2023', TRUE),
+    ('Durand', 'Paul', 'paul.durand@example.com', 'paulsecure', FALSE);
+
+-- Ajout de données dans la table Promotion
+INSERT INTO Promotion (nom, annee, code_inscription)
+VALUES 
+    ('Promo 2023', 2023, 12345),
+    ('Promo 2024', 2024, 67890);
+
+-- Ajout de données dans la table Status
+INSERT INTO Status (nom)
+VALUES 
+    ('Actif'),
+    ('Inactif');
+
+-- Ajout de données dans la table Role
+INSERT INTO Role (nom)
+VALUES 
+    ('Admin'),
+    ('Étudiant'),
+    ('Professeur');
+
+-- Ajout de données dans la table Tentative
+INSERT INTO Tentative (tentative_date, enonce, id_utilisateur, id_question)
+VALUES 
+    ('2025-01-01', 'Essai pour résoudre 2x + 3 = 7', 1, 1),
+    ('2025-01-02', 'Tentative de résoudre une question de mécanique', 2, 2),
+    ('2025-01-03', 'Calcul d’une expression mathématique', 3, 3);
+
+-- Ajout de données dans la table Tentative_assignement
+INSERT INTO Tentative_assignement (id_tentative, id_proposition)
+VALUES 
+    (1, 1), -- Tentative correcte pour la question 1
+    (2, 1), -- Tentative correcte pour la question 2
+    (3, 1); -- Proposition correcte pour la question 3
+
+-- Ajout de données dans la table Fichier
+INSERT INTO Fichier (nom, contenu, id_question)
+VALUES 
+    ('Algèbre_Basique.pdf', 'Ce fichier contient une introduction à l’algèbre.', 1),
+    ('Mécanique_Newton.pdf', 'Document sur les lois de Newton.', 2),
+    ('Programmation_Bases.pdf', 'Cours sur les variables et les types en programmation.', 3);
+
+-- Ajout de données dans la table Role_assignement
+INSERT INTO Role_assignement (id_role, id_utilisateur)
+VALUES 
+    (1, 1), -- Jean Dupont est Admin
+    (2, 2), -- Sophie Martin est Étudiante
+    (3, 3); -- Paul Durand est Professeur
+
+-- Ajout de données dans la table Utilisateur_assignement
+INSERT INTO Utilisateur_assignement (id_promotion, id_utilisateur)
+VALUES 
+    (1, 1), -- Jean Dupont dans Promo 2023
+    (1, 2), -- Sophie Martin dans Promo 2023
+    (2, 3); -- Paul Durand dans Promo 2024
+
+-- Ajout de données dans la table PromoMatiere_assignement
+INSERT INTO PromoMatiere_assignement (id_promotion, id_matiere)
+VALUES 
+    (1, 1), -- Promo 2023 étudie Mathématiques
+    (1, 2), -- Promo 2023 étudie Physique
+    (2, 3); -- Promo 2024 étudie Informatique
+
+-- Ajout de données dans la table Evaluation_auto
+INSERT INTO Evaluation_auto (id_utilisateur, id_competence, id_status, evaluation_auto_date)
+VALUES 
+    (1, 1, 1, '2025-01-03'), -- Jean Dupont a évalué la compétence 1
+    (2, 2, 1, '2025-01-04'), -- Sophie Martin a évalué la compétence 2
+    (3, 3, 2, '2025-01-05'); -- Paul Durand a évalué la compétence 3 (Inactif)
+
+-- Ajout de données dans la table Auto_evaluation
+INSERT INTO Auto_evaluation (id_utilisateur, id_competence, id_status, auto_evaluation_date)
+VALUES 
+    (1, 1, 1, '2025-01-06'), -- Jean Dupont auto-évaluation sur compétence 1
+    (2, 2, 1, '2025-01-07'), -- Sophie Martin auto-évaluation sur compétence 2
+    (3, 3, 2, '2025-01-08'); -- Paul Durand auto-évaluation sur compétence 3 (Inactif)
+   
+

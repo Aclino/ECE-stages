@@ -99,4 +99,17 @@ app.get('/api/exos',async(req, res) => {
 
 ///////////////////////////////////////////////////////////////////////////////
 
+app.get('/api/utilisateur',async(req, res) => {
+  try {
+      const queryExo = " SELECT nom "
 
+      const resultExo = await pool.query(queryExo)
+
+      res.json({
+          exo: resultExo.rows
+      })
+  } catch (err) {
+      console.error("Erreur interne :", err)
+      res.status(500).json({ error: 'Erreur interne du serveur' })
+  }
+})

@@ -16,8 +16,7 @@ import profil from './components/profil.vue'
 <section>
 <div class="slide"><exoSlide/></div>
 <div class="main"><profil/></div>
-<!-- <div class="slide"><exo/><slidederoulant/></div>
-<div class="main"><deroulant /> </div> -->
+
 
 </section>
 
