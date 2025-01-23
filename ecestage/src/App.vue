@@ -6,6 +6,7 @@ import exo from './components/exo.vue';
 import exoSlide from './components/exoSlide.vue';
 import headers from './components/headers.vue';
 import footers from './components/footers.vue';
+import profil from './components/profil.vue'
 </script>
 
 <template>
@@ -14,8 +15,8 @@ import footers from './components/footers.vue';
 
 <section>
 <div class="slide"><exoSlide/></div>
-<div class="main"><exo/></div>
-<!-- <div class="slide"><slidederoulant/></div>
+<div class="main"><profil/></div>
+<!-- <div class="slide"><exo/><slidederoulant/></div>
 <div class="main"><deroulant /> </div> -->
 
 </section>
@@ -27,14 +28,15 @@ import footers from './components/footers.vue';
 <style>
 section{
   display: flex;
-  width: 100%;
+  height: 85vh;
 }
 .slide{
   background-color: #dddddd;
   flex: 0 0 20%;
+  height :85vh;
 }
 .main{
-  min-height: 100%;
+
   flex: 0 0 80%;
   background-color: #eeeeee;
 }
