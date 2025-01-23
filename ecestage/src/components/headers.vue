@@ -77,7 +77,7 @@ header {
 
 .logo img {
     width: 30%;
-    padding: 10px;
+    margin: 0 auto;
 }
 
 /* Icône de profil */
@@ -96,7 +96,7 @@ header {
     position: absolute;
     top: 40px;
     right: 0;
-    background-color: #007bff;
+    background-color: #00828b;
     color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -109,9 +109,10 @@ header {
     text-decoration: none;
     color:white;
     transition: background-color 0.5s ease;
+    font-family: 'Montserrat', sans-serif;
 }
 
 .dropdown a:hover {
-    background-color: #0056b3;
+    background-color: #006f79;
 }
 </style>

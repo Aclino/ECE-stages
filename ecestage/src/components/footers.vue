@@ -9,7 +9,7 @@
 </script>
 <style>
 footer {
-    background-color: #007bff;
+    background-color: #335353;
     color: white;
     padding: 10px 0;
     text-align: center;

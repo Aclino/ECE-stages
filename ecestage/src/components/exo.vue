@@ -208,12 +208,13 @@ h4 {
 }
 
 .reponse {
-    background: linear-gradient(#8e86b5, #acaeed);
+    background: linear-gradient(135deg, #0097a1, #007580);
     border-radius: 10px;
     padding: 5px;
     margin: 5%;
     grid-column: 3/10;
     grid-row: 2/3;
+    color: #ffffff;
 }
 
 input{
@@ -242,10 +243,10 @@ input{
     padding: 5%;
     margin: 12% 0% 12% 0%;
     border-radius: 50px;
-    background: linear-gradient(#8e86b5, #acaeed);
+    background: linear-gradient(135deg, #0097a1, #007580);
     text-decoration: none;
-    color: black;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    box-shadow: 0px 0px 25px rgba(0, 134, 143, 0.5);
 
     border: none;
 }
@@ -287,10 +288,10 @@ input{
     padding: 5%;
     margin: 12% 0% 12% 0%;
     border-radius: 50px;
-    background: linear-gradient(#8e86b5, #acaeed);
+    background: linear-gradient(135deg, #0097a1, #007580);
     text-decoration: none;
-    color: black;
-    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.5);
+    color: #ffffff;
+    box-shadow: 0px 0px 25px rgba(0, 134, 143, 0.5);
 
     border: none;
 }
