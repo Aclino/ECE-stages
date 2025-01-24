@@ -12,8 +12,8 @@
 
         <div class="email">
             <h3>adresse email :</h3>
-            <p @click="count=1">modifier mon mot de passe</p>
-            <div class="password-form">
+            <button @click="count=1">modifier mon mot de passe</button>
+            <div class="password-form" v-show="count">
         <form @submit.prevent="handleSubmit">
             <h2>Modifier le mot de passe</h2>
             <div class="form-group">
@@ -33,9 +33,9 @@
             </div>
             <button type="submit">Enregistrer</button>
         </form>
-    </div>
+            </div>
 
-    </div> 
+        </div> 
     </div>
 </template>
 <script setup>
@@ -75,7 +75,7 @@ const handleSubmit = () => {
         confirmPassword.value = '';
         errors.value = {};
     }
-};
+
 
 return {
     currentPassword,
@@ -83,7 +83,7 @@ return {
     confirmPassword,
     errors,
     handleSubmit
-};
+};};
 
 </script>
 <style scoped>
