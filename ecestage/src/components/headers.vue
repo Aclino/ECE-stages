@@ -1,12 +1,14 @@
 <template>
     <header>
         <div class="home-button">
-            <a href="accueil.html">
+            <router-link to="/">
                 <img src="../images/home-icon.png" alt="Accueil" class="home-icon">
-            </a>
+            </router-link>
         </div>
         <div class="logo">
-            <img src="../images/ECE_LOGO.png" alt="Logo ECE">
+            <router-link to="/exo">
+                <img src="../images/ECE_LOGO.png" alt="Logo ECE">
+            </router-link>
         </div>
         
         <div 
@@ -16,10 +18,10 @@
         >
             <img src="../images/Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
             <div v-show="isDropdownVisible" class="dropdown" id="dropdownMenu">
-               <a href="#">Profil</a>
-               <a href="#">Sécurité</a>
-            <a href="#">Accueil</a>
-              <a href="#">Progression</a>
+                <a href="#">Profil</a>
+                <a href="#">Sécurité</a>
+                <a href="#">Accueil</a>
+                <a href="#">Progression</a>
             </div>            
         </div>
     </header>
@@ -61,23 +63,28 @@ header {
 
 /* Logo */
 .logo {
-    display: flex;
-    align-items: center;
+    text-align: center;
+}
+
+.logo a {
+    display: block;
+    width: 30%;
+    margin: 0 auto;
+}
+
+.logo img {
+    display: block;
+    width: 100%;
 }
 
 .home-button {
-    margin-right: 10px; /* Espacement entre le bouton et le logo */
+    margin-right: 10px;
 }
 
 .home-icon {
     width: 40px;
     height: auto;
     cursor: pointer;
-}
-
-.logo img {
-    width: 30%;
-    margin: 0 auto;
 }
 
 /* Icône de profil */

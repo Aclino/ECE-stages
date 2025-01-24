@@ -1,26 +1,20 @@
 <script setup>
 import { ref } from 'vue';
-import deroulant from './components/deroulant.vue';
-import slidederoulant from './components/slidederoulant.vue'
-import exo from './components/exo.vue';
-import exoSlide from './components/exoSlide.vue';
 import headers from './components/headers.vue';
 import footers from './components/footers.vue';
-import profil from './components/profil.vue'
+// import profil from './components/profil.vue'
 </script>
 
 <template>
 
-<headers/>
+  <div>
 
-<section>
-<div class="slide"><exoSlide/></div>
-<div class="main"><profil/></div>
+    <router-view></router-view>
 
+  </div>
 
-</section>
-
-<footers/>
+  <!-- <ExoPage /> -->
+  <!-- <DeroulantPage /> -->
 
 </template>
 
