@@ -26,5 +26,7 @@
 section{
   display: flex;
   height: 85vh;
+  align-items: center;
 }
+
 </style>

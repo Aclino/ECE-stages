@@ -89,8 +89,11 @@ return {
 
 </script>
 <style scoped>
-.case{
+
+.case{ 
+
     margin: 5vh;
+   margin-left:50vh ;
     background-color: aliceblue;
     border-radius: 10px;
     height : 75vh;
