@@ -11,8 +11,9 @@
         </div>
 
         <div class="email">
-            <h3>adresse email :</h3>
-            <button @click="count=1">modifier mon mot de passe</button>
+            <h3>adresse email :<br>
+            <p>{{ email }}</p></h3>
+            <button @click="count==1?count=0:count=1">modifier mon mot de passe</button>
             <div class="password-form" v-show="count">
         <form @submit.prevent="handleSubmit">
             <h2>Modifier le mot de passe</h2>
@@ -45,6 +46,7 @@ const prenom = ref('Nicola');
 const promo = ref('ING3');
 const count = ref(0)
 const errors = ref({});
+const email = ref('exeample@exemple.fr');
 
 const validateForm = () => {
     const errorMessages = {};
@@ -98,12 +100,12 @@ return {
 }
 .name{
     grid-area: name;
-    
+    height: 10vh;
     margin: 5vh;
     border-radius: 10px;
 }
 h1,h2,h3{
-    height: 30%;
+    height: 5vh;
 }
 .photo{
     grid-area: photo;
@@ -116,10 +118,32 @@ img{
 }
     
 
-.email{grid-area: email;
+.email{height: 50vh;
+    display:grid;
+    grid-area: email;
     margin:5vh;
     border-radius: 10px;
-    
+   grid-template-areas: "ad form""bout form"
+   ; 
 
+}
+.email h3{
+    grid-area: ad;
+}
+.email button{
+    grid-area: bout;
+    height:max-content;
+    width:max-content;
+}
+.password-form{
+    grid-area: form;
+}
+.form-group{
+    display:flex;
+    flex-direction: column;
+    padding-bottom: 2vh;
+}
+.form-group input{
+    width: 50%;
 }
 </style>
