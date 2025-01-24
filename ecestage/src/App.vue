@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import headers from './components/headers.vue';
 import footers from './components/footers.vue';
-// import profil from './components/profil.vue'
+import profil from './components/profil.vue'
 </script>
 
 <template>
@@ -12,9 +12,6 @@ import footers from './components/footers.vue';
     <router-view></router-view>
 
   </div>
-
-  <!-- <ExoPage /> -->
-  <!-- <DeroulantPage /> -->
 
 </template>
 

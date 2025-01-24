@@ -18,9 +18,7 @@
         >
             <img src="../images/Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
             <div v-show="isDropdownVisible" class="dropdown" id="dropdownMenu">
-                <a href="#">Profil</a>
-                <a href="#">Sécurité</a>
-                <a href="#">Accueil</a>
+                <router-link to="/profil">Profil</router-link>
                 <a href="#">Progression</a>
             </div>            
         </div>
