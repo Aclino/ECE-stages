@@ -156,6 +156,11 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// Exemple de route protégée
+app.get('/api/profil', authenticateToken, (req, res) => {
+    res.json({ message: `Bienvenue sur votre profil, utilisateur ${req.user.email}` });
+});
+
 app.listen(PORT, () => {
     console.log(`Serveur lancé sur http://localhost:${PORT}`);
 });
