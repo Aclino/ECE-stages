@@ -29,7 +29,7 @@ function checkToken() {
     }
 
     // Valider le token en effectuant une requête à une route protégée
-    fetch('http://localhost:3000/api/utilisateur', {
+    fetch('http://localhost:3000/api/login', {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${token}`, // Inclure le token dans les en-têtes
