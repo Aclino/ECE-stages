@@ -25,7 +25,7 @@
     };
 </script>
 
-<style>
+<style scoped>
 section{
   display: flex;
   height: 85vh;

@@ -3,7 +3,8 @@ import { ref, reactive, onMounted } from 'vue';
 
 // Données dynamiques
 const matieres = ref([]); // Liste des matières
-const joins = ref([]);    // Relations matière-chapitres-compétences
+const chapitres = ref([]);
+const competences = ref([]);
 
 // Fonction pour récupérer les données depuis l'API
 async function fetchAndDisplayData() {
@@ -19,18 +20,29 @@ async function fetchAndDisplayData() {
     console.log('Données reçues :', data);
 
     matieres.value = data.matieres; // Stocker les matières
-    joins.value = data.joins;       // Stocker les relations
+    chapitres.value = data.chapitres;
+    competences.value = data.competences;
   } catch (error) {
     console.error('Erreur lors de l\'affichage des données :', error);
   }
 }
 
+
 // Gestion des états ouverts/fermés
-const openState = reactive({}); // État des menus
+const openState = reactive({
+  matiere: null,
+  chapitre: null
+});
 
 // Fonction pour gérer l'ouverture/fermeture
-function toggleOpen(key) {
-  openState[key] = !openState[key]; // Basculer l'état
+function toggleOpen(type, key) {
+  if (openState[type] === key) {
+    // Si on clique sur le même élément, on le ferme
+    openState[type] = null;
+  } else {
+    // Sinon, on ouvre le nouvel élément et on ferme l'ancien
+    openState[type] = key;
+  }
   console.log('État mis à jour :', openState);
 }
 
@@ -43,27 +55,27 @@ onMounted(fetchAndDisplayData);
             <ul>
                 <!-- Liste des matières -->
                 <li v-for="matiere in matieres" :key="matiere.nom" class="menu-item">
-                    <span @click="toggleOpen(matiere.nom)">
-                        <span class="icon" :class="{ 'rotate-90': openState[matiere.nom] }">▶</span>
+                    <span @click="toggleOpen('matiere', matiere.nom)">
+                        <span class="icon" :class="{ 'rotate-90': openState.matiere === matiere.nom }">▶</span>
                         {{ matiere.nom }}
                     </span>
                     <!-- Liste des chapitres avec animation -->
                     <transition name="slide">
-                        <ul v-if="openState[matiere.nom]" class="chapitre">
-                            <li v-for="chapitre in joins.filter(j => j.matiere_nom === matiere.nom)" 
-                                :key="chapitre.chapitre_nom" 
+                        <ul v-if="openState.matiere === matiere.nom" class="chapitre">
+                            <li v-for="chapitre in chapitres.filter(j => j.id_matiere === matiere.id_matiere)" 
+                                :key="chapitre.id_matiere" 
                                 class="chapitre-item">
-                                <span @click="toggleOpen(chapitre.chapitre_nom)">
-                                    <span class="icon" :class="{ 'rotate-90': openState[chapitre.chapitre_nom] }">▶</span>
-                                    {{ chapitre.chapitre_nom }}
+                                <span @click="toggleOpen('chapitre', chapitre.nom)">
+                                    <span class="icon" :class="{ 'rotate-90': openState.chapitre === chapitre.nom }">▶</span>
+                                    {{ chapitre.nom }}
                                 </span>
                                 <!-- Liste des compétences (sans flèche) -->
                                 <transition name="slide">
-                                    <ul v-if="openState[chapitre.chapitre_nom]" class="competence">
-                                        <li v-for="competence in joins.filter(j => j.chapitre_nom === chapitre.chapitre_nom)" 
-                                            :key="competence.competence_nom" 
+                                    <ul v-if="openState.chapitre === chapitre.nom" class="competence">
+                                        <li v-for="competence in competences.filter(j => j.id_chapitre === chapitre.id_chapitre)" 
+                                            :key="competence.id_chapitre" 
                                             class="competence-item">
-                                            <span>{{ competence.competence_nom }}</span>
+                                            <span>{{ competence.nom }}</span>
                                         </li>
                                     </ul>
                                 </transition>
