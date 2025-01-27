@@ -25,7 +25,7 @@
     };
 </script>
 
-<style>
+<style scoped>
 section{
   display: flex;
   height: 85vh;
@@ -36,7 +36,6 @@ section{
   height :85vh;
 }
 .main{
-
   flex: 0 0 80%;
   background-color: #eeeeee;
 }

@@ -54,12 +54,12 @@ Ce projet vise à développer un **site web** pour l'**ECE**, permettant d'éval
 
 Pour toute question ou suggestion, veuillez contacter l’un des membres de l’équipe du projet :
 
-- Noah NICOLA : [thibaud.bellaton@edu.ece.fr](mailto:noah.nicola@edu.ece.fr)  [@Aclino](https://github.com/Aclino) 
-- Oscar BOSSELUT : [Romeo.Bonnet@edu.ece.fr](mailto:oscar.bosselut@edu.ece.fr) [@oscarbslt](https://github.com/oscarbslt)
+- Noah NICOLA : [noah.nicola@edu.ece.fr](mailto:noah.nicola@edu.ece.fr)  [@Aclino](https://github.com/Aclino) 
+- Oscar BOSSELUT : [oscar.bosselut@edu.ece.fr](mailto:oscar.bosselut@edu.ece.fr) [@oscarbslt](https://github.com/oscarbslt)
 - Alban DECHIROT : [alban.dechirot@edu.ece.fr](mailto:alban.dechirot@edu.ece.fr) [@Alban121](https://github.com/Alban121)
 - Thibaud BELLATON : [thibaud.bellaton@edu.ece.fr](mailto:thibaud.bellaton@edu.ece.fr)  [@thibaud-bltn](https://github.com/thibaud-bltn)
-- Ismael SAID ISMAIL : [Romeo.Bonnet@edu.ece.fr](mailto:ismael.saidismail@edu.ece.fr)
-- Mahouna HESSOU : [Romeo.Bonnet@edu.ece.fr](mailto:mahouna.hessou@edu.ece.fr)
+- Ismael SAID ISMAIL : [ismael.saidismail@edu.ece.fr](mailto:ismael.saidismail@edu.ece.fr)
+- Mahouna HESSOU : [mahouna.hessou@edu.ece.fr](mailto:mahouna.hessou@edu.ece.fr)
 
 ---
 

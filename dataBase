@@ -186,7 +186,7 @@ INSERT INTO Chapitre (nom, ordre, description, id_matiere)
 VALUES 
     ('Algèbre', 1, 'Chapitre sur les bases de l’algèbre', 1), -- Mathématiques
     ('Mécanique', 1, 'Introduction à la mécanique', 2),       -- Physique
-    ('Programmation', 1, 'Bases de la programmation', 3);     -- Informatique
+    ('Programmation en C', 1, 'Bases de la programmation en C', 3);     -- Informatique
 
     
     INSERT INTO Poids (nom, valeur)
@@ -197,7 +197,11 @@ INSERT INTO Competence (nom, ordre, description, id_chapitre, id_poids)
 VALUES 
     ('Résolution d’équations', 1, 'Résoudre des équations simples', 1, 1),  -- Algèbre
     ('Loi de Newton', 1, 'Comprendre et appliquer la deuxième loi de Newton', 2, 1), -- Mécanique
-    ('Variables et types', 1, 'Comprendre les bases des variables', 3, 1); -- Programmation
+    ('Oscillateurs harmoniques', 2, 'Comprendre les oscillateurs harmoniques', 2, 1), -- Mécanique
+    ('Variables et types', 1, 'Comprendre les bases des variables', 3, 1), -- Programmation
+    ('Tests et boucles', 2, 'Comprendre la notion de boucle et de condition', 3, 1), -- Programmation
+    ('Sous-programmes et multi-fichiers .c', 3, 'Partitionner son code', 3, 1), -- Programmation
+    ('Structures et tableaux', 4, 'Regrouper ses variables', 3, 1); -- Programmation
 
     
     INSERT INTO Question (nom, enonce, id_competence, id_poids, id_question_type)
