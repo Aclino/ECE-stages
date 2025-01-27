@@ -20,6 +20,7 @@
             <div v-show="isDropdownVisible" class="dropdown" id="dropdownMenu">
                 <router-link to="/profil">Profil</router-link>
                 <a href="#">Progression</a>
+                <a @click="ladeco" href="">déconnection</a>
             </div>            
         </div>
     </header>
@@ -27,6 +28,9 @@
 
 <script setup>
 
+function ladeco(){
+localStorage.removeItem('token');
+}
 import { ref } from 'vue';
 
 const isDropdownVisible = ref(false);

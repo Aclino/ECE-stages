@@ -7,6 +7,7 @@ const routes = [
   { path: '/', component: DeroulantPage },
   { path: '/exo', component: ExoPage },
   { path: '/profil', component: ProfilPage }
+  //{path : '/login',component : LoginPage}
 ];
 
 const router = createRouter({

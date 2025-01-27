@@ -35,7 +35,7 @@
             errorMessage.style.display = 'none'; // Masquer le message d'erreur au début
 
             try {
-                const response = await fetch('http://localhost:3000/api/utilisateur', {
+                const response = await fetch('http://localhost:3001/api/utilisateur', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(data),
