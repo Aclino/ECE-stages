@@ -19,8 +19,7 @@
             <img src="../images/Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
             <div v-show="isDropdownVisible" class="dropdown" id="dropdownMenu">
                 <router-link to="/profil">Profil</router-link>
-                <a href="#">Progression</a>
-                <a @click="ladeco" href="">déconnection</a>
+                <a @click="ladeco" href="">Déconnection</a>
             </div>            
         </div>
     </header>

@@ -1,7 +1,9 @@
 <template>
   <footer>
         <a href="#">A Propos</a>
+        <a>|</a>
         <a href="#">Contact</a>
+        <a>|</a>
         <a href="#">Actualités</a>
     </footer>
 </template>
@@ -11,9 +13,11 @@
 footer {
     background-color: #335353;
     color: white;
-    padding: 10px 0;
     text-align: center;
-    height:5vh
+    height:5vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 footer nav ul {
@@ -27,6 +31,7 @@ footer nav ul {
 footer  a {
     color: white;
     text-decoration: none;
-    padding-left :10px;
+    padding : 0px 8px 0px 8px;
+    font-family: 'Montserrat', sans-serif;
 }
 </style>

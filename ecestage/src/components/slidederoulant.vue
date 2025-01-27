@@ -2,7 +2,7 @@
 import { ref, reactive, onMounted } from 'vue';
 
 // Données dynamiques
-const matieres = ref([]); // Liste des matières
+const matieres = ref([]);
 const chapitres = ref([]);
 const competences = ref([]);
 
@@ -17,16 +17,14 @@ async function fetchAndDisplayData() {
     if (!response.ok) throw new Error('Erreur lors de la récupération des données.');
 
     const data = await response.json();
-    console.log('Données reçues :', data);
 
-    matieres.value = data.matieres; // Stocker les matières
+    matieres.value = data.matieres;
     chapitres.value = data.chapitres;
     competences.value = data.competences;
   } catch (error) {
     console.error('Erreur lors de l\'affichage des données :', error);
   }
 }
-
 
 // Gestion des états ouverts/fermés
 const openState = reactive({
@@ -50,42 +48,9 @@ onMounted(fetchAndDisplayData);
 </script>
 
 <template>
-    <nav class="menu">
-        <div class="item">
-            <ul>
-                <!-- Liste des matières -->
-                <li v-for="matiere in matieres" :key="matiere.nom" class="menu-item">
-                    <span @click="toggleOpen('matiere', matiere.nom)">
-                        <span class="icon" :class="{ 'rotate-90': openState.matiere === matiere.nom }">▶</span>
-                        {{ matiere.nom }}
-                    </span>
-                    <!-- Liste des chapitres avec animation -->
-                    <transition name="slide">
-                        <ul v-if="openState.matiere === matiere.nom" class="chapitre">
-                            <li v-for="chapitre in chapitres.filter(j => j.id_matiere === matiere.id_matiere)" 
-                                :key="chapitre.id_matiere" 
-                                class="chapitre-item">
-                                <span @click="toggleOpen('chapitre', chapitre.nom)">
-                                    <span class="icon" :class="{ 'rotate-90': openState.chapitre === chapitre.nom }">▶</span>
-                                    {{ chapitre.nom }}
-                                </span>
-                                <!-- Liste des compétences (sans flèche) -->
-                                <transition name="slide">
-                                    <ul v-if="openState.chapitre === chapitre.nom" class="competence">
-                                        <li v-for="competence in competences.filter(j => j.id_chapitre === chapitre.id_chapitre)" 
-                                            :key="competence.id_chapitre" 
-                                            class="competence-item">
-                                            <span>{{ competence.nom }}</span>
-                                        </li>
-                                    </ul>
-                                </transition>
-                            </li>
-                        </ul>
-                    </transition>
-                </li>
-            </ul>
-        </div>
-    </nav>
+    <section class="menu">
+        <a>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Maxime esse modi, eos aspernatur iure quam, laborum ducimus minus incidunt, animi aliquid debitis voluptas ex aliquam molestias facere magnam minima tempora!</a>
+    </section>
 </template>
 
 <style scoped>
@@ -106,82 +71,5 @@ onMounted(fetchAndDisplayData);
     margin: 10px 0px 10px 10px;
     font-family: 'Montserrat', sans-serif;
     overflow-y: auto;
-}
-
-
-/* Liste générale */
-ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-/* Styles pour les boutons */
-.menu-item > span {
-    cursor: pointer;
-    color: white;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    width: 100%;
-    font-size: 1.2em;
-    font-weight: bold;
-}
-
-.chapitre-item > span,
-.competence-item > span {
-    cursor: pointer;
-    color: white;
-    padding: 10px;
-    display: flex;
-    align-items: center;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    width: 100%;
-    font-size: 1.2em;
-}
-
-.menu-item > span:hover,
-.chapitre-item > span:hover,
-.competence-item > span:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-/* Sous-menus */
-.chapitre, .competence {
-    overflow: hidden;
-    margin-left: 15px;
-}
-
-/* Icônes animées (uniquement matières et chapitres) */
-.icon {
-    transition: transform 0.3s ease-in-out;
-    margin-right: 8px;
-}
-
-.rotate-90 {
-    transform: rotate(90deg);
-}
-
-/* Animation d'ouverture FERMETURE en mode défilement */
-.slide-enter-active, .slide-leave-active {
-    transition: max-height 0.4s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-.slide-enter-from, .slide-leave-to {
-    max-height: 0;
-    opacity: 0;
-}
-
-.slide-enter-to, .slide-leave-from {
-    max-height: 300px; /* Ajustable selon le contenu */
-    opacity: 1;
-}
-
-/* Suppression de la flèche pour les compétences */
-.competence-item > span {
-    padding-left: 20px; /* Alignement propre avec le reste */
 }
 </style>

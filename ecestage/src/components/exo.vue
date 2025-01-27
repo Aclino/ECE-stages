@@ -208,7 +208,7 @@ h4 {
 }
 
 .reponse {
-    background: linear-gradient(135deg, #0097a1, #007580);
+    background-color: #00828b;
     border-radius: 10px;
     padding: 5px;
     margin: 5%;
@@ -243,7 +243,7 @@ input{
     padding: 5%;
     margin: 12% 0% 12% 0%;
     border-radius: 50px;
-    background: linear-gradient(135deg, #0097a1, #007580);
+    background: linear-gradient(45deg, #017179, #02b7c4);
     text-decoration: none;
     color: #ffffff;
     box-shadow: 0px 0px 25px rgba(0, 134, 143, 0.5);
@@ -288,7 +288,7 @@ input{
     padding: 5%;
     margin: 12% 0% 12% 0%;
     border-radius: 50px;
-    background: linear-gradient(135deg, #0097a1, #007580);
+    background: linear-gradient(45deg, #017179, #02b7c4);
     text-decoration: none;
     color: #ffffff;
     box-shadow: 0px 0px 25px rgba(0, 134, 143, 0.5);
