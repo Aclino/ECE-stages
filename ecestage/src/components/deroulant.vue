@@ -47,7 +47,7 @@ onMounted(fetchAndDisplayData);
                 <!-- Liste des matières -->
                 <li v-for="matiere in matieres" :key="matiere.nom" class="menu-item">
                     <span @click="toggleOpen(matiere.nom)">
-                        <h1>{{ matiere.nom }}</h1>
+                        {{ matiere.nom }}
                         <span class="icon" :class="{ 'rotate-90':  openState[matiere.nom]}"></span>
                     </span>
                     <!-- Liste des chapitres avec animation -->
@@ -57,7 +57,7 @@ onMounted(fetchAndDisplayData);
                                 :key="chapitre.id_matiere" 
                                 class="chapitre-item">
                                 <span @click="toggleOpen(chapitre.nom)">
-                                    {{ chapitre.nom }}
+                                    {{ chapitre.ordre }}. {{ chapitre.nom }}
                                     <span class="icon" :class="{ 'rotate-90': openState[chapitre.nom] }"></span>
                                 </span>
                                 <!-- Liste des compétences (sans flèche) -->
@@ -113,11 +113,24 @@ ul {
     border-bottom: 1px solid #616161; /* Ligne en dessous */
     transition: background-color 0.3s ease;
     width: 100%;
-    font-size: 1.2em;
+    font-size: 1.8em;
     font-weight: bold;
 }
 
-.chapitre-item > span,
+.chapitre-item > span {
+    cursor: pointer;
+    color: black;
+    padding: 10px;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-size: 1.6em;
+    font-weight: normal;
+}
+
 .competence-item > span {
     cursor: pointer;
     color: black;
@@ -132,24 +145,24 @@ ul {
 
 .chapitre-item > span:hover,
 .competence-item > span:hover {
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(210, 210, 210, 0.6);
 }
 
 /* Sous-menus */
-.chapitre, .competence {
+.competence {
     overflow: hidden;
     margin-left: 15px;
 }
 
-/* Icônes animées (uniquement matières et chapitres) */
+/* Icônes animées */
 .icon {
-    width: 16px; /* Ajuste la taille selon ton image */
+    width: 16px;
     height: 16px;
-    background-image: url('../images/chevron.png'); /* Mets le bon chemin */
-    background-size: contain; /* Ajuste l'image à la taille */
+    background-image: url('../images/chevron.png');
+    background-size: contain;
     background-repeat: no-repeat;
     display: inline-block;
-    transition: transform 0.3s ease; /* Animation si besoin */
+    transition: transform 0.3s ease;
     transition: transform 0.3s ease-in-out;
     margin-left: auto;
 }

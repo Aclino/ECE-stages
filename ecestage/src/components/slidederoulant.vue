@@ -98,16 +98,16 @@ onMounted(fetchAndDisplayData);
 
 /* Conteneur principal */
 .menu {
-    
     border-radius: 20px;
     background: linear-gradient(45deg, #017179, #02b7c4);
     color: white;
-    height: 100%;
+    height: calc(100% - 20px);
     padding: 15px;
     margin: 10px 0px 10px 10px;
     font-family: 'Montserrat', sans-serif;
     overflow-y: auto;
 }
+
 
 /* Liste générale */
 ul {

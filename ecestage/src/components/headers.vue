@@ -61,9 +61,9 @@ header {
     /* background: linear-gradient(180deg, #b6b6b6, #e9e9e9);; */
     background-color: #f0f6f7;
     border-radius: 20px 20px 20px 20px;
-    /* margin: 10px; */
+    margin: 10px;
     padding: 5px 20px;
-    height: 10vh;
+    height: calc(10vh - 20px);
 }
 
 /* Logo */
