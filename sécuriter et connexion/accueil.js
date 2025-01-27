@@ -24,7 +24,8 @@ function checkToken() {
 
     if (!token) {
         // Si le token est manquant, rediriger vers register.html
-        window.location.href = 'register.html';
+        //window.location.href = 'register.html';
+        console.log('token manquant')
         return;
     }
 
@@ -53,7 +54,8 @@ function handleLogout() {
     if (logoutButton) {
         logoutButton.addEventListener('click', () => {
             localStorage.removeItem('token'); // Supprimer le token du stockage local
-            window.location.href = 'register.html'; // Rediriger vers la page de connexion
+           // window.location.href = 'register.html'; // Rediriger vers la page de connexion
+           console.log('tojen supprimer');
         });
     }
 }

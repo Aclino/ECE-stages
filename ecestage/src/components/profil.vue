@@ -40,13 +40,19 @@
     </div>
 </template>
 <script setup>
+
 import { ref, onMounted } from 'vue';
+import { routerKey } from 'vue-router';
 const nom = ref('Noah');
 const prenom = ref('Nicola');
 const promo = ref('ING3');
 const count = ref(0)
 const errors = ref({});
 const email = ref('exeample@exemple.fr');
+import { useRouter } from 'vue-router';
+
+
+    const router = useRouter().push('/');
 
 const validateForm = () => {
     const errorMessages = {};

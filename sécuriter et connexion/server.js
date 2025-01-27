@@ -39,7 +39,7 @@ function authenticateToken(req, res, next) {
 }
 
 // Route pour récupérer tous les utilisateurs
-app.get('/api/utilisateur', async (req, res) => {
+app.get('/api/utilisateur', authenticateToken, async (req, res) => {
     try {
         const query = 'SELECT * FROM stageproject.utilisateur';
         const result = await pool.query(query);
@@ -137,7 +137,7 @@ app.post('/api/login', async (req, res) => {
         const token = jwt.sign(
             { id: utilisateur.id_utilisateur, email: utilisateur.email }, // Payload
             SECRET_KEY, // Clé secrète
-            { expiresIn: '2h' } // Expiration
+            { expiresIn: '30s' } // Expiration
         );
 
         // Réponse en cas de succès

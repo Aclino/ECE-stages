@@ -13,6 +13,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.listen(PORT, () => {
     console.log(`Le serveur est démarré sur http://localhost:${PORT}`);
 });
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization"); // Ajout de Authorization
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS"); // Autoriser les méthodes nécessaires
+  next();
+});
 ////////////////////////////////////////////////////////////////////////////////
 app.get('/api/matiere', async (req, res) => {
     try {
