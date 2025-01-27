@@ -1,65 +1,34 @@
 <script setup>
 import { ref } from 'vue';
-import headers from './components/headers.vue';
-import footers from './components/footers.vue';
-import profil from './components/profil.vue';
 import { useRouter } from 'vue-router';
 
+// Déclaration des variables réactives
+const errorMessage = ref(null); // Pour afficher les erreurs
+const message = ref(null); // Pour afficher les messages de succès
 
-    
-// Vérifier la présence et la validité du token
-// checkToken(()=>{
-//     const token = localStorage.getItem('token'); // Récupérer le token depuis le stockage local
+// Utilisation de Vue Router
+const router = useRouter();
 
-//     if (!token) {
-//         // Si le token est manquant, rediriger vers register.html
-//         useRouter().push('/');
-//         console.log('token manquant')
-//         return;
-//     }
-
-//     // Valider le token en effectuant une requête à une route protégée
-//     fetch('http://localhost:3000/api/utilisateur', {
-//         method: 'GET',
-//         headers: {
-//             'Authorization': `Bearer ${token}`, // Inclure le token dans les en-têtes
-//         },
-//     })
-//         .then((response) => {
-//             if (!response.ok) {
-//                 throw new Error('Token invalide ou expiré');
-//             }
-//         })
-//         .catch(() => {
-//             // Rediriger vers register.html en cas d'erreur
-//             useRouter().push('/');
-//         });
-// });
 </script>
 
 <template>
-
   <div>
-
     <router-view></router-view>
 
+   
   </div>
-
 </template>
 
 <style>
-section{
-  display: flex;
-  height: 85vh;
+/* Styles */
+form {
+  margin-bottom: 2rem;
 }
-.slide{
-  background-color: #dddddd;
-  flex: 0 0 20%;
-  height :85vh;
+h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
-.main{
-
-  flex: 0 0 80%;
-  background-color: #eeeeee;
+button {
+  margin-top: 1rem;
 }
 </style>
