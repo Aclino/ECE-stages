@@ -98,10 +98,13 @@ onMounted(fetchAndDisplayData);
 
 /* Conteneur principal */
 .menu {
-    background: linear-gradient(135deg, #007a8c, #005f66);
+    
+    border-radius: 20px;
+    background: linear-gradient(45deg, #017179, #02b7c4);
     color: white;
     height: 100%;
     padding: 15px;
+    margin: 10px 0px 10px 10px;
     font-family: 'Montserrat', sans-serif;
     overflow-y: auto;
 }
@@ -114,7 +117,19 @@ ul {
 }
 
 /* Styles pour les boutons */
-.menu-item > span,
+.menu-item > span {
+    cursor: pointer;
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
 .chapitre-item > span,
 .competence-item > span {
     cursor: pointer;

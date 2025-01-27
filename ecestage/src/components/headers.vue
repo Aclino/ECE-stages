@@ -54,7 +54,10 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #f0f0f0;
+    /* background: linear-gradient(180deg, #b6b6b6, #e9e9e9);; */
+    background-color: #f0f6f7;
+    border-radius: 20px 20px 20px 20px;
+    /* margin: 10px; */
     padding: 5px 20px;
     height: 10vh;
 }

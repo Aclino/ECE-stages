@@ -31,13 +31,14 @@ section{
   height: 85vh;
 }
 .slide{
-  background-color: #dddddd;
+  background-color: #fafafa;
+  border-radius: 20px;
   flex: 0 0 20%;
   height :85vh;
 }
 .main{
 
   flex: 0 0 80%;
-  background-color: #eeeeee;
+  background-color: #fafafa;
 }
 </style>
