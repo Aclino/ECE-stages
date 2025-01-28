@@ -41,7 +41,7 @@ async function checkToken() {
 
   if (!token) {
     console.log('Token manquant');
-    router.push('/register'); // Redirection vers la page d'inscription
+    router.push('/login'); // Redirection vers la page d'inscription
     return;
   }
 
@@ -64,7 +64,7 @@ async function checkToken() {
   } catch (error) {
     console.error(error.message);
     console.log('Redirection vers la page d\'inscription');
-    router.push('/register'); // Redirection en cas d'erreur
+    router.push('/login'); // Redirection en cas d'erreur
   }
 }
 
@@ -128,7 +128,7 @@ async function login(event) {
 
       // Redirection après un délai
       setTimeout(() => {
-        router.push('/acceuil'); // Page après connexion
+       // router.push('/acceuil'); // Page après connexion
       }, 2000);
     } else {
       errorMessage.value = result.error || 'Erreur inconnue.';

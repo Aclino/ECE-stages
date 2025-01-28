@@ -66,6 +66,7 @@ function authenticateToken(req, res, next) {
         req.user = user; // Ajouter les données du token à la requête
         next();
     });
+  
 }
 
 // Route pour récupérer tous les utilisateurs
