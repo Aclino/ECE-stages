@@ -16,7 +16,9 @@
             @mouseover="showDropdown"
             @mouseleave="hideDropdown"
         >
-            <img @click="profil" src="../images/Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
+            <router-link to="/profil">
+                <img src="../images/Icone-profil.png" alt="Profil" class="profile-icon" id="profileIcon">
+            </router-link>
             <div v-show="isDropdownVisible" class="dropdown" id="dropdownMenu">
                 <router-link to="/profil">Profil</router-link>
                 <a @click="ladeco" href="">Déconnection</a>
@@ -26,10 +28,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
-function profil() {
- useRouter().push('/profil');
-}
+
 function ladeco(){
 localStorage.removeItem('token');
 }

@@ -46,7 +46,7 @@ async function checkToken() {
   }
 
   try {
-    const response = await fetch('http://localhost:3001/api/utilisateur', {
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/utilisateur`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${token}`, // Inclure le token dans les en-têtes
