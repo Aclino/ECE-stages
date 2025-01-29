@@ -84,10 +84,10 @@ app.get('/api/utilisateur', authenticateToken, async (req, res) => {
 // Route pour ajouter un utilisateur avec hachage du mot de passe, vérification de l'email et gestion des rôles
 app.post('/api/utilisateur', async (req, res) => {
     try {
-        const { nom, email, mot_de_passe,code } = req.body;
+        const { nom, email, mot_de_passe } = req.body;
 
-        if (!nom || !email || !mot_de_passe || !code) {
-            return res.status(400).json({ error: 'Les champs nom, email, code et mot_de_passe sont requis.' });
+        if (!nom || !email || !mot_de_passe) {
+            return res.status(400).json({ error: 'Les champs nom, email et mot_de_passe sont requis.' });
         }
 
         // Vérifier si l'email existe déjà dans la base de données
