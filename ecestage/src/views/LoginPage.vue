@@ -18,7 +18,7 @@
 
 <-- Messages -->
 
-
+<button @click="checkToken">Vérifier le token</button>
   <div class="container">
     <img src="../images/ECE_LOGO.png" alt="Logo ECE" class="logo">
     <h1>Connexion</h1>
@@ -109,7 +109,7 @@ async function login(event) {
       // Stocker le token dans le stockage local
       localStorage.setItem('token', result.token);
       message.value = 'Connexion réussie ! Redirection en cours...';
-
+      console.log(localStorage.getItem('token'));
       // Redirection après un délai
       setTimeout(() => {
        router.push('/'); // Page après connexion

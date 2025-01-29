@@ -20,15 +20,5 @@ const router = useRouter();
 </template>
 
 <style>
-/* Styles */
-form {
-  margin-bottom: 2rem;
-}
-h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
-}
-button {
-  margin-top: 1rem;
-}
+
 </style>

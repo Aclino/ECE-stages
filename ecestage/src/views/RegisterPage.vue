@@ -115,7 +115,7 @@ body {
       <img src="../images/ECE_LOGO.png" alt="Logo ECE" class="logo">
       <h1>Inscription</h1>
     
-    <form class="form" id ="le-dev-me-soule">
+    <form class="form" id ="le-dev-me-soule" @submit="inscription">
       <label for="email">Adresse Mail</label>
       <input type="email" id="email" name="email" required>
 
@@ -125,8 +125,7 @@ body {
       <label for="prenom">Prénom(s)</label>
       <input type="text" id="prenom" name="prenom" required>
 
-      <label for="code">Code d'accès à la promotion</label>
-      <input type="text" id="code" name="code" required>
+
 
       <label for="password">Mot de Passe</label>
       <input type="password" id="password" name="password" required>
@@ -164,7 +163,7 @@ async function inscription(event) {
       errorMessage.value = result.error; // Afficher le message d'erreur
     } else {
       alert('Utilisateur créé avec succès !');
-      router.push('/login'); // Redirection après succès
+     // router.push('/login'); // Redirection après succès
     }
   } catch (error) {
     console.error("Erreur lors de l'inscription :", error);
