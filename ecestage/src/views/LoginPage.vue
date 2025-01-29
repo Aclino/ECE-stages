@@ -1,24 +1,8 @@
 <template><body>
   
 
- <!-- Vérification du token --
- <button @click="checkToken">Vérifier le token</button>
 
-<-- Formulaire d'inscription --
-<form id="registerForm" @submit="inscription">
-  <h2>Inscription</h2>
-  <input type="text" name="nom" placeholder="Nom" required />
-  <input type="text" name="prenom" placeholder="Prénom" required /> <-- Nouveau champ --
-  <input type="email" name="email" placeholder="Email" required />
-  <input type="password" name="mot_de_passe" placeholder="Mot de passe" required />
-  <button type="submit">S'inscrire</button>
-</form>
-
-
-
-<-- Messages -->
-
-<button @click="checkToken">Vérifier le token</button>
+<!--button @click="checkToken">Vérifier le token</button-->
   <div class="container">
     <img src="../images/ECE_LOGO.png" alt="Logo ECE" class="logo">
     <h1>Connexion</h1>
