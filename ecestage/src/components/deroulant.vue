@@ -36,6 +36,32 @@ function toggleOpen(key) {
   openState[key] = !openState[key]; // Basculer l'état
   console.log('État mis à jour :', openState);
 }
+async function exomatiere(mat) { 
+    console.log(mat);
+    try {
+        const response = await fetch(`http://localhost:3001/api/exos/matiere?matiere=${encodeURIComponent(mat)}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        const data = await response.json();
+        console.log("Réponse backend :", data);
+
+        if (data.ids && data.ids.length > 0) {
+            // Construire l'URL avec les IDs
+            const urlWithIds = `http://localhost:5173/exo/${data.ids.join(',')}`;
+
+            // Rediriger le navigateur vers cette URL
+            window.location.href = urlWithIds;
+        } else {
+            console.error("Aucun ID reçu.");
+        }
+    } catch (error) {
+        console.error('Erreur de génération de l\'exercice', error);
+    }
+}
+
+
 
 onMounted(fetchAndDisplayData);
 </script>
@@ -48,6 +74,7 @@ onMounted(fetchAndDisplayData);
                 <li v-for="matiere in matieres" :key="matiere.nom" class="menu-item">
                     <span @click="toggleOpen(matiere.nom)">
                         {{ matiere.nom }}
+                        <router-link to="/exo"><button  @click="exomatiere(matiere.nom)">Exercice</button></router-link>
                         <span class="icon" :class="{ 'rotate-90':  openState[matiere.nom]}"></span>
                     </span>
                     <!-- Liste des chapitres avec animation -->
@@ -190,4 +217,40 @@ ul {
 .competence-item > span {
     padding-left: 20px; /* Alignement propre avec le reste */
 }
+button {
+    position: relative;
+    overflow: hidden; /* Évite les débordements */
+    background: linear-gradient(90deg, #017179, #02b7c4);
+    border: none;
+    color: white;
+    text-align: right;
+    border-radius: 10px;
+    height: calc(50% - 5%);
+    padding: 4px 7px;
+    margin: 10px 0px 10px 10px;
+    font-family: 'Montserrat', sans-serif;
+    
+    transition: background-color 0.45s ease-in-out;
+    z-index: 1;
+}
+
+/* Pseudo-élément pour l'effet de transition */
+button::after {
+    content: "";
+    position: absolute;
+    inset: 0; /* Prend toute la place du bouton */
+    background: linear-gradient(90deg, #02b7b8, #017189);
+    opacity: 0; /* Caché par défaut */
+    transition: opacity 0.45s ease-in-out;
+    z-index: -1; /* Passe derrière le texte */
+}
+
+/* Au survol, on affiche le nouveau dégradé */
+button:hover::after {
+    opacity: 1;
+}
+
+/* Empêche que le texte soit affecté par l'animation */
+
+
 </style>

@@ -6,7 +6,7 @@
             </router-link>
         </div>
         <div class="logo">
-            <router-link to="/exo">
+            <router-link to="/">
                 <img src="../images/ECE_LOGO.png" alt="Logo ECE">
             </router-link>
         </div>

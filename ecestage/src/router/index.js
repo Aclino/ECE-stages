@@ -4,9 +4,10 @@ import ExoPage from '../views/ExoPage.vue';
 import ProfilPage from '../views/ProfilPage.vue';
 import LoginPage from '../views/LoginPage.vue';
 import RegisterPage from '../views/RegisterPage.vue';
+
 const routes = [
   { path: '/', component: DeroulantPage },
-  { path: '/exo', component: ExoPage },
+  { path: '/exo/:ids', component: ExoPage },
   { path: '/profil', component: ProfilPage },
   {path : '/login',component : LoginPage},
   {path : '/register',component : RegisterPage}
