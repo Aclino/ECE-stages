@@ -76,44 +76,81 @@ router.get('/api/exos', async (req, res) => {
     }
 });
 
-
 router.get('/api/exos/matiere', async (req, res) => { 
     try {
-        console.log("Requête reçue :", req.query); 
-
+        console.log("Requête reçue :", req.query.count); 
+        let query;
+        
         const matiere = req.query.matiere || 'Mathématiques';
         console.log("Matière reçue :", matiere); 
-
-        const query = `
-            SELECT q.id_question
-            FROM competence.Question q
-            JOIN competence.Competence c ON q.id_competence = c.id_competence
-            JOIN competence.Chapitre ch ON c.id_chapitre = ch.id_chapitre
-            JOIN competence.Matiere m ON ch.id_matiere = m.id_matiere
-            WHERE m.nom = $1 
-            ORDER BY RANDOM()
-            LIMIT 20;
-        `;
         
-        const { rows } = await pool.query(query, [matiere]);
+        let rows;
+        switch(Number(req.query.count)){ // Convertir en nombre pour éviter les erreurs
+            case 1:        
+                query = `
+                    SELECT q.id_question
+                    FROM competence.Question q
+                    JOIN competence.Competence c ON q.id_competence = c.id_competence
+                    JOIN competence.Chapitre ch ON c.id_chapitre = ch.id_chapitre
+                    JOIN competence.Matiere m ON ch.id_matiere = m.id_matiere
+                    WHERE m.nom = $1 
+                    ORDER BY RANDOM()
+                    LIMIT 20;
+                `;
+                rows = await pool.query(query, [matiere]);
+                break;
 
-        console.log("Résultat SQL :", rows); 
+            case 2:            
+                query = `
+                    SELECT q.id_question
+                    FROM competence.Question q
+                    JOIN competence.Competence c ON q.id_competence = c.id_competence
+                    JOIN competence.Chapitre ch ON c.id_chapitre = ch.id_chapitre
+                    JOIN competence.Matiere m ON ch.id_matiere = m.id_matiere
+                    WHERE ch.nom = $1 
+                    ORDER BY RANDOM()
+                    LIMIT 20;
+                `;
+                rows = await pool.query(query, [matiere]);
+                break;
 
-        const questionIds = rows.map(row => row.id_question);
+            case 3:            
+                query = `
+                    SELECT q.id_question
+                    FROM competence.Question q
+                    JOIN competence.Competence c ON q.id_competence = c.id_competence
+                    JOIN competence.Chapitre ch ON c.id_chapitre = ch.id_chapitre
+                    JOIN competence.Matiere m ON ch.id_matiere = m.id_matiere
+                    WHERE c.nom = $1 
+                    ORDER BY RANDOM()
+                    LIMIT 20;
+                `;
+                rows = await pool.query(query, [matiere]);
+                break;
+
+            default:
+                return res.status(400).json({ error: "Valeur de 'count' invalide" });
+        }
+
+        console.log("Résultat SQL :", rows.rows); 
+
+        const questionIds = rows.rows.map(row => row.id_question);
         const urlWithIds = `/api/exos/questions/${questionIds.join(',')}`;
 
         res.json({ url: urlWithIds, ids: questionIds });
+        
     } catch (err) {
-        console.error("❌ ERREUR SQL :", err.message); // Affiche l'erreur exacte
-        res.status(500).json({ error: err.message }); // Renvoie l'erreur réelle
+        console.error("❌ ERREUR SQL :", err.message);
+        res.status(500).json({ error: err.message });
     }
 });
+
 
 
 router.get('/api/exos/questions/:ids', async (req, res) => {
     try {
         const ids = req.params.ids.split(',').map(Number); // Convertir en tableau de nombres
-        const query = `SELECT * FROM Question WHERE id_question = ANY($1)`;
+        const query = `SELECT * FROM competence.question WHERE id_question = ANY($1)`;
         const { rows } = await pool.query(query, [ids]);
 
         res.json(rows);

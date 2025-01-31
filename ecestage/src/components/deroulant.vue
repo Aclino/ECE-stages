@@ -36,13 +36,17 @@ function toggleOpen(key) {
   openState[key] = !openState[key]; // Basculer l'état
   console.log('État mis à jour :', openState);
 }
-async function exomatiere(mat) { 
+async function exo(mat,count) { 
     console.log(mat);
     try {
-        const response = await fetch(`http://localhost:3001/api/exos/matiere?matiere=${encodeURIComponent(mat)}`, {
+            const response = await fetch(`http://localhost:3001/api/exos/matiere?matiere=${encodeURIComponent(mat ,count)}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
+        
+        
+    
+        
 
         const data = await response.json();
         console.log("Réponse backend :", data);
@@ -74,7 +78,7 @@ onMounted(fetchAndDisplayData);
                 <li v-for="matiere in matieres" :key="matiere.nom" class="menu-item">
                     <span @click="toggleOpen(matiere.nom)">
                         {{ matiere.nom }}
-                        <router-link to="/exo"><button  @click="exomatiere(matiere.nom)">Exercice</button></router-link>
+                        <router-link to="/exo"><button  @click="exo(matiere.nom,1)">Exercice</button></router-link>
                         <span class="icon" :class="{ 'rotate-90':  openState[matiere.nom]}"></span>
                     </span>
                     <!-- Liste des chapitres avec animation -->
@@ -85,6 +89,7 @@ onMounted(fetchAndDisplayData);
                                 class="chapitre-item">
                                 <span @click="toggleOpen(chapitre.nom)">
                                     {{ chapitre.ordre }}. {{ chapitre.nom }}
+                                    <router-link to="/exo"><button  @click="exo(chapitre.nom,2)">Exercice</button></router-link>
                                     <span class="icon" :class="{ 'rotate-90': openState[chapitre.nom] }"></span>
                                 </span>
                                 <!-- Liste des compétences (sans flèche) -->
@@ -93,7 +98,11 @@ onMounted(fetchAndDisplayData);
                                         <li v-for="competence in competences.filter(j => j.id_chapitre === chapitre.id_chapitre)" 
                                             :key="competence.id_chapitre" 
                                             class="competence-item">
-                                            <span>{{ competence.nom }}</span>
+                                            <span>
+                                                {{ competence.nom }}
+                                                <router-link to="/exo"><button  @click="exo(competence.nom,3)">Exercice</button></router-link>
+                                            </span>
+                                            
                                         </li>
                                     </ul>
                                 </transition>

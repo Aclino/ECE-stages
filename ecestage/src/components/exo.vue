@@ -69,6 +69,8 @@ onMounted(() => {
 function nextQuestion() {
   if (currentIndex.value < questionIds.length - 1) {
     // On augmente l'index pour passer à la question suivante
+    count.value++;
+    console.log(count.value);
     currentIndex.value++;
     questionId.value = questionIds[currentIndex.value];
     fetchAndDisplayData(questionId.value);  // Recharger les données de la question suivante
