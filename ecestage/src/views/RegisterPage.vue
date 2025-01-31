@@ -147,7 +147,7 @@ export default {
   methods: {
     async inscription() {
       try {
-        const response = await fetch("http://localhost:3001/api/utilisateur", {
+        const response = await fetch("http://localhost:3001/api/inscription", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

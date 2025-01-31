@@ -100,4 +100,39 @@ router.post('/api/inscription', async (req, res) => {
     }
 });
 
+// ✅ Route pour récupérer les informations de l'utilisateur à partir du JWT avec la promotion
+router.get('/api/utilisateur', async (req, res) => {
+    try {
+        console.log("Headers reçus:", req.headers);
+        
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            
+            return res.status(401).json({ error: 'Token manquant.' });
+        }
+
+        const decoded = jwt.verify(token, SECRET_KEY);
+        console.log("Token décodé:", decoded);
+        
+        const query = `
+            SELECT u.nom, u.prenom, u.email, p.nom AS promo 
+            FROM competence.utilisateur u
+            LEFT JOIN competence.utilisateur_assignement ua ON u.id_utilisateur = ua.id_utilisateur
+            LEFT JOIN competence.promotion p ON ua.id_promotion = p.id_promotion
+            WHERE u.id_utilisateur = $1
+        `;
+        const result = await pool.query(query, [decoded.id]);
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Utilisateur non trouvé.' });
+        }
+
+        res.status(200).json(result.rows[0]);
+    } catch (err) {
+        console.error("Erreur backend:", err);
+        res.status(500).json({ error: 'Erreur lors de la récupération des informations utilisateur.' });
+    }
+});
+
+
 module.exports = router;

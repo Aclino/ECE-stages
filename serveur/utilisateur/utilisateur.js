@@ -18,7 +18,7 @@ router.use((req, res, next) => {
   next();
 });
 // ✅ Route pour récupérer l'utilisateur connecté
-router.get('/api/utilisateur', authenticateToken, async (req, res) => {
+router.get('/api/checktoken', authenticateToken, async (req, res) => {
     try {
         const userId = req.user.id;
 

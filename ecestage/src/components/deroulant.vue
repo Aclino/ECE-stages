@@ -39,7 +39,7 @@ function toggleOpen(key) {
 async function exo(mat,count) { 
     console.log(mat);
     try {
-            const response = await fetch(`http://localhost:3001/api/exos/matiere?matiere=${encodeURIComponent(mat ,count)}`, {
+            const response = await fetch(`http://localhost:3001/api/exos/matiere?matiere=${encodeURIComponent(mat)}&count=${count}`, {
             method: 'GET',
             headers: { 'Content-Type': 'application/json' }
         });
