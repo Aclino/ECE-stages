@@ -3,6 +3,7 @@
     <Headers/>
     <section>
         <Ajoutslide class="slide"/>
+        <Recap class="main"></Recap>
     </section>
     <Footers/>
 
@@ -26,16 +27,16 @@
 <style scoped>
 section{
   display: flex;
-  flex-wrap: wrap;
-  height: 85h;
+  height: 85vh;
 }
 .slide{
   background-color: #fafafa;
+  border-radius: 20px;
   flex: 0 0 20%;
   height :85vh;
-  word-break:break-word;
 }
 .main{
+
   flex: 0 0 80%;
   background-color: #fafafa;
 }

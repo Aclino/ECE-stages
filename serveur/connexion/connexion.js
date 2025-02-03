@@ -6,7 +6,7 @@ const pool = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = process.env.SECRET_KEY || "fallback_secret";
+const SECRET_KEY = "fallback_secret";
 const router = express.Router();
 
 router.use(cors());
