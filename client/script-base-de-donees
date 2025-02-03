@@ -159,142 +159,174 @@ CREATE TABLE Auto_evaluation (
     FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
     FOREIGN KEY (id_status) REFERENCES Status(id_status)
 );
--- Insertion of example data for the tables
 
--- Table Utilisateur
-INSERT INTO Utilisateur (id_utilisateur, nom, email, mot_de_passe, actif) VALUES
-(1, 'Alice Dupont', 'alice@example.com', 'password123', true),
-(2, 'Bob Martin', 'bob@example.com', 'securepass', true),
-(3, 'Charlie Durant', 'charlie@example.com', 'mypassword', false);
 
--- Table Promotion
-INSERT INTO Promotion (id_promotion, nom, annee, code_inscription) VALUES
-(1, 'Promo 2025', 2025, 12345),
-(2, 'Promo 2024', 2024, 67890);
+INSERT INTO Question_type (nom)
+VALUES 
+    ('QCM'),
+    ('QCU'),
+    ('Question Ouverte');
 
--- Table Status
-INSERT INTO Status (id_status, nom) VALUES
-(1, 'En cours'),
-(2, 'Acquis'),
-(3, 'Non acquis');
+INSERT INTO Matiere (nom)
+VALUES 
+    ('Mathématiques'),
+    ('Physique'),
+    ('Informatique');
 
--- Table Role
-INSERT INTO Role (id_role, nom) VALUES
-(1, 'Admin'),
-(2, 'Etudiant'),
-(3, 'Enseignant');
 
--- Table Matiere
-INSERT INTO Matiere (id_matiere, nom) VALUES
-(1, 'Mathématiques'),
-(2, 'Physique'),
-(3, 'Informatique');
+INSERT INTO Chapitre (nom, ordre, description, id_matiere)
+VALUES 
+    ('Algèbre', 1, 'Chapitre sur les bases de l’algèbre', 1), -- Mathématiques
+    ('Mécanique', 1, 'Introduction à la mécanique', 2),       -- Physique
+    ('Programmation', 1, 'Bases de la programmation', 3);     -- Informatique
 
--- Table Question_type
-INSERT INTO Question_type (id_question_type, nom) VALUES
-(1, 'QCM'),
-(2, 'Vrai/Faux'),
-(3, 'Réponse ouverte');
+    
+    INSERT INTO Poids (nom, valeur)
+VALUES 
+    ('Facile', 1);
 
--- Table Poids
-INSERT INTO Poids (id_poids, nom, valeur) VALUES
-(1, 'Faible', 1),
-(2, 'Moyen', 2),
-(3, 'Élevé', 3);
+INSERT INTO Competence (nom, ordre, description, id_chapitre, id_poids)
+VALUES 
+    ('Résolution d’équations', 1, 'Résoudre des équations simples', 1, 1),  -- Algèbre
+    ('Loi de Newton', 1, 'Comprendre et appliquer la deuxième loi de Newton', 2, 1), -- Mécanique
+    ('Variables et types', 1, 'Comprendre les bases des variables', 3, 1); -- Programmation
 
--- Table Chapitre
-INSERT INTO Chapitre (id_chapitre, nom, ordre, description, id_matiere) VALUES
-(1, 'Algebre', 1, 'Introduction à l algebre',1),
-(2, 'Mécanique', 2, 'Introduction à la mécanique', 2);
+    
+    INSERT INTO Question (nom, enonce, id_competence, id_poids, id_question_type)
+VALUES 
+    ('Question Algèbre', 'Quelle est la solution de l’équation 2x + 3 = 7 ?', 1, 1, 1), -- QCM
+    ('Question Mécanique', 'Quelle force faut-il appliquer pour accélérer un objet de 5kg à 2m/s² ?', 2, 1, 2), -- QCU
+    ('Question Programmation', 'Quelle est la valeur de 5 + 3 * 2 ?', 3, 1, 3); -- Question ouverte
 
--- Table Competence
-INSERT INTO Competence (id_competence, nom, ordre, description, id_chapitre, id_poids) VALUES
-(1, 'Résolution déquations', 1, 'Savoir résoudre des équations', 1, 2),
-(2, 'Loi de Newton', 1, 'Comprendre la loi de Newton', 2, 3);
+    
+    INSERT INTO Proposition (enonce, explication, est_correcte, id_question)
+VALUES 
+    ('x = 2', 'La solution correcte est obtenue en isolant x : 2x + 3 = 7 donne x = 2.', true, 1),
+    ('x = 3', 'Ceci est incorrect. Vous avez probablement oublié de soustraire correctement.', false, 1),
+    ('x = 4', 'Ceci est incorrect. Vous avez mal divisé à la fin.', false, 1);
 
--- Table Question
-INSERT INTO Question (id_question, nom, enoncer, id_competence, id_poids) VALUES
-(1, 'Équation simple', 'Résolvez 2x + 3 = 7', 1, 2),
-(2, 'Force et masse', 'Quelle est la force exercée sur un objet de 10kg soumis à une accélération de 2m/s^2?', 2, 3);
+    
+    INSERT INTO Proposition (enonce, explication, est_correcte, id_question)
+VALUES 
+    ('10N', 'La force est obtenue en utilisant F = m * a, soit 5kg * 2m/s² = 10N.', true, 2),
+    ('5N', 'Ceci est incorrect. Vous avez mal calculé en utilisant F = m * a.', false, 2),
+    ('15N', 'Ceci est incorrect. Vous avez probablement ajouté les valeurs au lieu de les multiplier.', false, 2);
 
--- Table Reponse
-INSERT INTO Reponse (reponse, explication, id_question) VALUES
-('x = 2', 'On soustrait 3 puis divise par 2', 1),
-('20N', 'La force est calculée avec F=ma', 2);
+    
+    INSERT INTO Proposition (enonce, explication, est_correcte, id_question)
+VALUES 
+    ('11', 'Le résultat correct est obtenu grâce à la priorité des opérateurs : multiplication avant addition.', null, 3);
+ -- Ajout de données dans la table Utilisateur
+INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, actif)
+VALUES 
+    ('Dupont', 'Jean', 'jean.dupont@example.com', 'password123', TRUE),
+    ('Martin', 'Sophie', 'sophie.martin@example.com', 'sophie2023', TRUE),
+    ('Durand', 'Paul', 'paul.durand@example.com', 'paulsecure', FALSE);
 
--- Table Question_assignement
-INSERT INTO Question_assignement (id_competence, id_question) VALUES
-(1, 1),
-(2, 2);
+-- Ajout de données dans la table Promotion
+INSERT INTO Promotion (nom, annee, code_inscription)
+VALUES 
+    ('Promo 2023', 2023, 12345),
+    ('Promo 2024', 2024, 67890);
 
--- Table Proposition
-INSERT INTO Proposition (id_proposition, enoncer, explication, est_correcte, id_question) VALUES
-(1, 'x = 2', 'Bonne réponse', true, 1),
-(2, 'x = 3', 'Mauvaise réponse', false, 1),
-(3, '20N', 'Bonne réponse', true, 2),
-(4, '15N', 'Mauvaise réponse', false, 2);
+-- Ajout de données dans la table Status
+INSERT INTO Status (nom)
+VALUES 
+    ('Actif'),
+    ('Inactif');
 
--- Table Tentative
-INSERT INTO Tentative (id_tentative, tentative_date, enoncer, id_utilisateur, id_question) VALUES
-(1, '2025-01-01', 'Essai sur équation', 1, 1),
-(2, '2025-01-02', 'Essai sur mécanique', 2, 2);
+-- Ajout de données dans la table Role
+INSERT INTO Role (nom)
+VALUES 
+    ('Admin'),
+    ('Étudiant'),
+    ('Professeur');
 
--- Table Tentative_assignement
-INSERT INTO Tentative_assignement (id_tentative, id_proposition) VALUES
-(1, 1),
-(2, 3);
+-- Ajout de données dans la table Tentative
+INSERT INTO Tentative (tentative_date, enonce, id_utilisateur, id_question)
+VALUES 
+    ('2025-01-01', 'Essai pour résoudre 2x + 3 = 7', 1, 1),
+    ('2025-01-02', 'Tentative de résoudre une question de mécanique', 2, 2),
+    ('2025-01-03', 'Calcul d’une expression mathématique', 3, 3);
 
--- Table Fichier
-INSERT INTO Fichier (nom, contenu, id_question) VALUES
-('equation_guide.pdf', 'Guide de résolution des équations', 1),
-('mecanique_notes.pdf', 'Notes sur la mécanique', 2);
+-- Ajout de données dans la table Tentative_assignement
+INSERT INTO Tentative_assignement (id_tentative, id_proposition)
+VALUES 
+    (1, 1), -- Tentative correcte pour la question 1
+    (2, 1), -- Tentative correcte pour la question 2
+    (3, 1); -- Proposition correcte pour la question 3
 
--- Table Email_verification
--- Note: Foreign key references corrected to point to Utilisateur
-INSERT INTO Email_verification (id_utilisateur, id_question) VALUES
-(1, 1),
-(2, 2);
+-- Ajout de données dans la table Fichier
+INSERT INTO Fichier (nom, contenu, id_question)
+VALUES 
+    ('Algèbre_Basique.pdf', 'Ce fichier contient une introduction à l’algèbre.', 1),
+    ('Mécanique_Newton.pdf', 'Document sur les lois de Newton.', 2),
+    ('Programmation_Bases.pdf', 'Cours sur les variables et les types en programmation.', 3);
 
--- Table Role_assignement
-INSERT INTO Role_assignement (id_role, id_utilisateur) VALUES
-(1, 1),
-(2, 2),
-(3, 3);
+-- Ajout de données dans la table Role_assignement
+INSERT INTO Role_assignement (id_role, id_utilisateur)
+VALUES 
+    (1, 1), -- Jean Dupont est Admin
+    (2, 2), -- Sophie Martin est Étudiante
+    (3, 3); -- Paul Durand est Professeur
 
--- Table Utilisateur_assignement
-INSERT INTO Utilisateur_assignement (id_promotion, id_utilisateur) VALUES
-(1, 1),
-(2, 2);
+-- Ajout de données dans la table Utilisateur_assignement
+INSERT INTO Utilisateur_assignement (id_promotion, id_utilisateur)
+VALUES 
+    (1, 1), -- Jean Dupont dans Promo 2023
+    (1, 2), -- Sophie Martin dans Promo 2023
+    (2, 3); -- Paul Durand dans Promo 2024
 
--- Table PromoMatiere_assignement
-INSERT INTO PromoMatiere_assignement (id_promotion, id_matiere) VALUES
-(1, 1),
-(1, 2);
+-- Ajout de données dans la table PromoMatiere_assignement
+INSERT INTO PromoMatiere_assignement (id_promotion, id_matiere)
+VALUES 
+    (1, 1), -- Promo 2023 étudie Mathématiques
+    (1, 2), -- Promo 2023 étudie Physique
+    (2, 3); -- Promo 2024 étudie Informatique
 
--- Table Evaluation_auto
-INSERT INTO Evaluation_auto (id_utilisateur, id_competence, id_status, evaluation_auto_date) VALUES
-(1, 1, 2, '2025-01-10'),
-(2, 2, 1, '2025-01-11');
+-- Ajout de données dans la table Evaluation_auto
+INSERT INTO Evaluation_auto (id_utilisateur, id_competence, id_status, evaluation_auto_date)
+VALUES 
+    (1, 1, 1, '2025-01-03'), -- Jean Dupont a évalué la compétence 1
+    (2, 2, 1, '2025-01-04'), -- Sophie Martin a évalué la compétence 2
+    (3, 3, 2, '2025-01-05'); -- Paul Durand a évalué la compétence 3 (Inactif)
 
--- Table Auto_evaluation
-INSERT INTO Auto_evaluation (id_utilisateur, id_competence, id_status, auto_evaluation_date) VALUES
-(1, 1, 2, '2025-01-12'),
-(2, 2, 3, '2025-01-13');
-SELECT
-    c.id_competence,
-    c.nom AS competence_nom,
-    c.description AS competence_description,
-    c.ordre AS competence_ordre,
-    ch.id_chapitre,
-    ch.nom AS chapitre_nom,
-    ch.description AS chapitre_description,
-    ch.ordre AS chapitre_ordre,
-    m.id_matiere,
-    m.nom AS matiere_nom
-FROM
-    Competence c
-INNER JOIN
-    Chapitre ch ON c.id_chapitre = ch.id_chapitre
-INNER JOIN
-    Matiere m ON ch.id_matiere = m.id_matiere;
+-- Ajout de données dans la table Auto_evaluation
+INSERT INTO Auto_evaluation (id_utilisateur, id_competence, id_status, auto_evaluation_date)
+VALUES 
+    (1, 1, 1, '2025-01-06'), -- Jean Dupont auto-évaluation sur compétence 1
+    (2, 2, 1, '2025-01-07'), -- Sophie Martin auto-évaluation sur compétence 2
+    (3, 3, 2, '2025-01-08'); -- Paul Durand auto-évaluation sur compétence 3 (Inactif)
+   
+INSERT INTO Chapitre (nom, ordre, description, id_matiere)
+VALUES 
+    ('Géométrie', 2, 'Chapitre sur les bases de la géométrie', 1), -- Mathématiques
+    ('Électromagnétisme', 2, 'Introduction à l’électromagnétisme', 2), -- Physique
+    ('Bases de données', 2, 'Introduction aux bases de données relationnelles', 3); -- Informatique
+-- Insérer 5 promotions si elles n'existent pas déjà
+INSERT INTO competence.promotion (nom, annee, code_inscription) VALUES 
+('ING 1', 2024, 12345),
+('ING 2', 2024, 23456),
+('ING 3', 2025, 34567),
+('ING 4', 2025, 45678),
+('ING 5', 2026, 56789)
+ON CONFLICT DO NOTHING;
+
+-- Associer ces promotions à l'utilisateur (id_utilisateur = 5)
+INSERT INTO competence.utilisateur_assignement (id_promotion, id_utilisateur)
+SELECT id_promotion, 5 FROM competence.promotion
+WHERE nom IN ('ING 1', 'ING 2', 'ING 3', 'ING 4', 'ING 5');
+SELECT * FROM competence.utilisateur_assignement WHERE id_utilisateur = 5;
+-- Assigner les 2 premières matières à chaque promotion
+INSERT INTO competence.promomatiere_assignement (id_promotion, id_matiere)
+SELECT p.id_promotion, m.id_matiere
+FROM competence.promotion p
+CROSS JOIN (
+    SELECT id_matiere 
+    FROM competence.matiere
+    ORDER BY id_matiere
+    LIMIT 2
+)m ;
+
+
 
