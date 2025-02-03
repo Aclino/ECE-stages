@@ -6,7 +6,7 @@ const cors = require('cors');
 const utilisateur = require('./utilisateur/utilisateur');
 const connexion = require('./connexion/connexion');
 const cours = require('./cours/cours');
-
+const prof= require('./utilisateur/prof/prof')
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -27,6 +27,7 @@ app.use((req, res, next) => {
 app.use(connexion);
 app.use(utilisateur);
 app.use(cours);
+app.use(prof);
 
 // Lancer le serveur
 app.listen(PORT, () => {

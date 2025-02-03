@@ -11,8 +11,8 @@
 
 <script>
     import Headers from '../components/headers.vue';
-    import Deroulant from '../components/deroulant.vue';
-    import DeroulantSlide from '../components/slidederoulant.vue';
+    import Deroulant from '../components/eleve/deroulant.vue';
+    import DeroulantSlide from '../components/eleve/slidederoulant.vue';
     import Footers from '../components/footers.vue';
   
     export default {

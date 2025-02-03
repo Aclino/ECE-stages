@@ -1,39 +1,39 @@
 <template>
-    <div>
-        <Headers />
-            <section>
-                <div class="slide"><ExoSlide /></div>
-                <div class="main"><Exo /> </div>
-            </section>
-        <Footers />
-    </div>
-</template>
+  
+    <Headers/>
+    <section>
+        <Ajoutslide class="slide"/>
+    </section>
+    <Footers/>
 
+</template>
 <script>
     import Headers from '../components/headers.vue';
-    import ExoSlide from '../components/eleve/exoSlide.vue';
-    import Exo from '../components/eleve/exo.vue';
+    import Ajoutslide from '../components/prof/slideprof.vue';
+    import Recap from '../components/prof/recap.vue';
     import Footers from '../components/footers.vue';
   
     export default {
         components: {
         Headers,
-        Exo,
-        ExoSlide,
+        Ajoutslide,
+        Recap,
         Footers
         }
     };
+    
 </script>
-
 <style scoped>
 section{
   display: flex;
-  height: 85vh;
+  flex-wrap: wrap;
+  height: 85h;
 }
 .slide{
   background-color: #fafafa;
   flex: 0 0 20%;
   height :85vh;
+  word-break:break-word;
 }
 .main{
   flex: 0 0 80%;

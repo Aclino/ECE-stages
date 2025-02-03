@@ -4,13 +4,14 @@ import ExoPage from '../views/ExoPage.vue';
 import ProfilPage from '../views/ProfilPage.vue';
 import LoginPage from '../views/LoginPage.vue';
 import RegisterPage from '../views/RegisterPage.vue';
-
+import ajoutPage from '../views/ProfajoutPage.vue';
 const routes = [
-  { path: '/', component: DeroulantPage },
-  { path: '/exo/:ids', component: ExoPage },
+  { path: '/', component: DeroulantPage ,meta: { requiresAuth: true }},
+  { path: '/exo/:ids', component: ExoPage ,meta: { requiresAuth: true }},
   { path: '/profil', component: ProfilPage,meta: { requiresAuth: true } },
   {path : '/login',component : LoginPage},
-  {path : '/register',component : RegisterPage}
+  {path : '/register',component : RegisterPage},
+  {path: '/ajout',component : ajoutPage}
 ];
 
 const router = createRouter({

@@ -194,7 +194,7 @@ ul {
 .icon {
     width: 16px;
     height: 16px;
-    background-image: url('../images/chevron.png');
+    background-image: url('../../images/chevron.png');
     background-size: contain;
     background-repeat: no-repeat;
     display: inline-block;
