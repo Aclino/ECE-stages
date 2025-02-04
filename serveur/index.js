@@ -2,11 +2,13 @@ require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const pool = require('/Users/ismaelsaid/Documents/ECE-stages-1/serveur/db');
 
 const utilisateur = require('./utilisateur/utilisateur');
 const connexion = require('./connexion/connexion');
 const cours = require('./cours/cours');
-const prof= require('./utilisateur/prof/prof')
+const prof = require('./utilisateur/prof/prof');
+const eleve = require('/Users/ismaelsaid/Documents/ECE-stages-1/serveur/utilisateur/eleve/eleve');
 const app = express();
 const PORT = process.env.PORT || 3001;
 
@@ -28,6 +30,7 @@ app.use(connexion);
 app.use(utilisateur);
 app.use(cours);
 app.use(prof);
+app.use(eleve);
 
 // Lancer le serveur
 app.listen(PORT, () => {
