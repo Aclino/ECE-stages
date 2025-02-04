@@ -5,7 +5,7 @@ import { ref, reactive, onMounted, computed } from 'vue';
 const matieres = ref([]); // Liste des matières
 const chapitres = ref([]);
 const competences = ref([]);
-const progression = ref({ total: 0, completed: 0 });
+const chapterProgression = reactive({});
 
 // Fonction pour récupérer les données depuis l'API
 async function fetchAndDisplayData() {
@@ -28,21 +28,37 @@ async function fetchAndDisplayData() {
   }
 }
 
-async function fetchProgression() {
+//gere la barre de progression
+async function fetchChapterProgression(chapitreId) {
     try {
-        const token = localStorage.getItem('token'); // Supposons que le token est stocké dans localStorage
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/progression`, {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/progression/${chapitreId}`, {
             headers: { 
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}` 
             }
         });
         const data = await response.json();
-        progression.value = data;
+        return data.total 
+            ? Math.round((data.completed / data.total) * 100)
+            : 0;
     } catch (error) {
-        console.error('Erreur lors de la récupération de la progression :', error);
+        console.error('Erreur lors de la récupération de la progression du chapitre :', error);
+        return 0;
     }
 }
+
+async function fetchProgression() {
+  for (const chapitre of chapitres.value) {
+    chapterProgression[chapitre.id_chapitre] = await fetchChapterProgression(chapitre.id_chapitre);
+  }
+}
+
+async function updateChapterProgression(chapitreId) {
+    const progression = await fetchChapterProgression(chapitreId);
+    chapterProgression[chapitreId] = progression;
+}
+
 
 
 // Gestion des états ouverts/fermés
@@ -113,17 +129,18 @@ const progressionPercentage = computed(() => {
                     <transition name="slide">
                         <ul v-if="openState[matiere.nom]" class="chapitre">
                             <li v-for="chapitre in chapitres.filter(j => j.id_matiere === matiere.id_matiere)" 
-                                :key="chapitre.id_matiere" 
-                                class="chapitre-item">
+                                :key="chapitre.id_chapitre" 
+                                class="chapitre-item"
+                                @mouseenter="updateChapterProgression(chapitre.id_chapitre)"> 
                                 <span @click="toggleOpen(chapitre.nom)">
                                     {{ chapitre.ordre }}. {{ chapitre.nom }}
 
-                                     <!-- Barre de progression pour chapitre avec pourcentage -->
+                                     <!-- Barre de progression dynamique -->
                                     <div class="progress-container">
                                         <div class="progress-bar">
-                                            <div class="progress" :style="{ width: progressionPercentage + '%' }"></div>
+                                            <div class="progress" :style="{ width: (chapterProgression[chapitre.id_chapitre] || 0) + '%' }"></div>
                                         </div>
-                                        <span class="percentage">{{ progressionPercentage }}%</span>
+                                        <span class="percentage">{{ chapterProgression[chapitre.id_chapitre] || 0 }}%</span>
                                     </div>
 
                                     <router-link to="/exo"><button  @click="exo(chapitre.nom,2)">Exercice</button></router-link>

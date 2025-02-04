@@ -22,7 +22,7 @@ app.use((req, res, next) => {
     next();
 });
 
-router.get('/api/progression', async (req, res) => {
+router.get('/api/progression/:id_chapitre', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
@@ -31,9 +31,23 @@ router.get('/api/progression', async (req, res) => {
 
         const decoded = jwt.verify(token, SECRET_KEY);
         const userId = decoded.id;
+        const chapitreId = req.params.id_chapitre;
 
-        const totalResult = await pool.query('SELECT COUNT(*) FROM competence.auto_evaluation WHERE id_utilisateur = $1', [userId]);
-        const completedResult = await pool.query('SELECT COUNT(*) FROM competence.auto_evaluation WHERE id_utilisateur = $1 AND id_status = 3', [userId]);
+        // Compter le total des auto-évaluations pour ce chapitre
+        const totalResult = await pool.query(`
+            SELECT COUNT(*) 
+            FROM competence.auto_evaluation ae
+            JOIN competence.competence c ON ae.id_competence = c.id_competence
+            WHERE ae.id_utilisateur = $1 AND c.id_chapitre = $2
+        `, [userId, chapitreId]);
+
+        // Compter les auto-évaluations complétées (id_status = 3)
+        const completedResult = await pool.query(`
+            SELECT COUNT(*) 
+            FROM competence.auto_evaluation ae
+            JOIN competence.competence c ON ae.id_competence = c.id_competence
+            WHERE ae.id_utilisateur = $1 AND c.id_chapitre = $2 AND ae.id_status = 3
+        `, [userId, chapitreId]);
 
         const total = parseInt(totalResult.rows[0].count, 10);
         const completed = parseInt(completedResult.rows[0].count, 10);
@@ -44,6 +58,7 @@ router.get('/api/progression', async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 });
+
 
 
 module.exports = router;

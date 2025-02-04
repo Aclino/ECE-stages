@@ -318,4 +318,13 @@ VALUES
     (3, 4, 4),
     (4, 4, 3),
     (4, 4, 2),
-    (5, 4, 1); 
+    (5, 4, 1);
+
+insert into competence (id_competence, id_chapitre, ordre, nom)
+values
+	(8,1,2, 'Polynomes');
+
+
+INSERT INTO auto_evaluation (id_status , id_utilisateur, id_competence)
+VALUES 
+    (1, 4, 8);
