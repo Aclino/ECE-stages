@@ -1,10 +1,11 @@
 <script setup>
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, computed } from 'vue';
 
 // Données dynamiques
 const matieres = ref([]); // Liste des matières
 const chapitres = ref([]);
 const competences = ref([]);
+const chapterProgression = reactive({});
 
 // Fonction pour récupérer les données depuis l'API
 async function fetchAndDisplayData() {
@@ -26,6 +27,38 @@ async function fetchAndDisplayData() {
     console.error('Erreur lors de l\'affichage des données :', error);
   }
 }
+
+//gere la barre de progression
+async function fetchChapterProgression(chapitreId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/progression/${chapitreId}`, {
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+        const data = await response.json();
+        return data.total 
+            ? Math.round((data.completed / data.total) * 100)
+            : 0;
+    } catch (error) {
+        console.error('Erreur lors de la récupération de la progression du chapitre :', error);
+        return 0;
+    }
+}
+
+async function fetchProgression() {
+  for (const chapitre of chapitres.value) {
+    chapterProgression[chapitre.id_chapitre] = await fetchChapterProgression(chapitre.id_chapitre);
+  }
+}
+
+async function updateChapterProgression(chapitreId) {
+    const progression = await fetchChapterProgression(chapitreId);
+    chapterProgression[chapitreId] = progression;
+}
+
 
 
 // Gestion des états ouverts/fermés
@@ -66,8 +99,19 @@ async function exo(mat,count) {
 }
 
 
+// Appel des fonctions à l'initialisation
+onMounted(() => {
+  fetchAndDisplayData();
+  fetchProgression();
+});
 
-onMounted(fetchAndDisplayData);
+// Calcul du pourcentage de progression
+const progressionPercentage = computed(() => {
+  return progression.value.total
+    ? Math.round((progression.value.completed / progression.value.total) * 100)
+    : 0;
+});
+
 </script>
 
 <template>
@@ -85,10 +129,20 @@ onMounted(fetchAndDisplayData);
                     <transition name="slide">
                         <ul v-if="openState[matiere.nom]" class="chapitre">
                             <li v-for="chapitre in chapitres.filter(j => j.id_matiere === matiere.id_matiere)" 
-                                :key="chapitre.id_matiere" 
-                                class="chapitre-item">
+                                :key="chapitre.id_chapitre" 
+                                class="chapitre-item"
+                                @mouseenter="updateChapterProgression(chapitre.id_chapitre)"> 
                                 <span @click="toggleOpen(chapitre.nom)">
                                     {{ chapitre.ordre }}. {{ chapitre.nom }}
+
+                                     <!-- Barre de progression dynamique -->
+                                    <div class="progress-container">
+                                        <div class="progress-bar">
+                                            <div class="progress" :style="{ width: (chapterProgression[chapitre.id_chapitre] || 0) + '%' }"></div>
+                                        </div>
+                                        <span class="percentage">{{ chapterProgression[chapitre.id_chapitre] || 0 }}%</span>
+                                    </div>
+
                                     <router-link to="/exo"><button  @click="exo(chapitre.nom,2)">Exercice</button></router-link>
                                     <span class="icon" :class="{ 'rotate-90': openState[chapitre.nom] }"></span>
                                 </span>
@@ -258,6 +312,36 @@ button::after {
 button:hover::after {
     opacity: 1;
 }
+
+/* Pour la barre de progression */
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espace entre la barre et le pourcentage */
+    margin-left: 10px;
+}
+
+.progress-bar {
+    width: 100px;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.progress {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.4s ease-in-out;
+}
+
+.percentage {
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #4caf50;
+}
+
 
 /* Empêche que le texte soit affecté par l'animation */
 

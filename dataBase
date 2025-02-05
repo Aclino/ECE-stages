@@ -247,10 +247,11 @@ VALUES
     ('Promo 2024', 2024, 67890);
 
 -- Ajout de données dans la table Status
-INSERT INTO Status (nom)
+INSERT INTO status (id_status , nom)
 VALUES 
-    ('Actif'),
-    ('Inactif');
+    (1, 'Non fait'),
+    (2, 'Pas reussit'),
+    (3, 'reussit'); 
 
 -- Ajout de données dans la table Role
 INSERT INTO Role (nom)
@@ -313,6 +314,22 @@ INSERT INTO Auto_evaluation (id_utilisateur, id_competence, id_status, auto_eval
 VALUES 
     (1, 1, 1, '2025-01-06'), -- Jean Dupont auto-évaluation sur compétence 1
     (2, 2, 1, '2025-01-07'), -- Sophie Martin auto-évaluation sur compétence 2
-    (3, 3, 2, '2025-01-08'); -- Paul Durand auto-évaluation sur compétence 3 (Inactif)
-   
+    (3, 3, 2, '2025-01-08'); -- Paul Durand auto-évaluation sur compétence 3 (Inactif)   
 
+
+-- Ajout de données dans la table auto_evaluation
+INSERT INTO auto_evaluation (id_status , id_utilisateur, id_competence)
+VALUES 
+    (3, 4, 4),
+    (4, 4, 3),
+    (4, 4, 2),
+    (5, 4, 1);
+
+insert into competence (id_competence, id_chapitre, ordre, nom)
+values
+	(8,1,2, 'Polynomes');
+
+
+INSERT INTO auto_evaluation (id_status , id_utilisateur, id_competence)
+VALUES 
+    (1, 4, 8);

@@ -76,17 +76,18 @@ router.get('/api/exos', async (req, res) => {
     }
 });
 
-router.get('/api/exos/matiere', async (req, res) => { 
+//route pour choisir 20 questions 
+router.get('/api/exos/matiere', async (req, res) => {
     try {
-        console.log("Requête reçue :", req.query.count); 
+        console.log("Requête reçue :", req.query.count);
         let query;
-        
+
         const matiere = req.query.matiere || 'Mathématiques';
-        console.log("Matière reçue :", matiere); 
-        
+        console.log("Matière reçue :", matiere);
+
         let rows;
-        switch(Number(req.query.count)){ // Convertir en nombre pour éviter les erreurs
-            case 1:        
+        switch (Number(req.query.count)) { // Convertir en nombre pour éviter les erreurs
+            case 1:
                 query = `
                     SELECT q.id_question
                     FROM competence.Question q
@@ -100,7 +101,7 @@ router.get('/api/exos/matiere', async (req, res) => {
                 rows = await pool.query(query, [matiere]);
                 break;
 
-            case 2:            
+            case 2:
                 query = `
                     SELECT q.id_question
                     FROM competence.Question q
@@ -114,7 +115,7 @@ router.get('/api/exos/matiere', async (req, res) => {
                 rows = await pool.query(query, [matiere]);
                 break;
 
-            case 3:            
+            case 3:
                 query = `
                     SELECT q.id_question
                     FROM competence.Question q
@@ -132,13 +133,13 @@ router.get('/api/exos/matiere', async (req, res) => {
                 return res.status(400).json({ error: "Valeur de 'count' invalide" });
         }
 
-        console.log("Résultat SQL :", rows.rows); 
+        console.log("Résultat SQL :", rows.rows);
 
         const questionIds = rows.rows.map(row => row.id_question);
         const urlWithIds = `/api/exos/questions/${questionIds.join(',')}`;
 
         res.json({ url: urlWithIds, ids: questionIds });
-        
+
     } catch (err) {
         console.error("❌ ERREUR SQL :", err.message);
         res.status(500).json({ error: err.message });
@@ -146,7 +147,7 @@ router.get('/api/exos/matiere', async (req, res) => {
 });
 
 
-
+//route pour choisir aleatoirement les 20 questions
 router.get('/api/exos/questions/:ids', async (req, res) => {
     try {
         const ids = req.params.ids.split(',').map(Number); // Convertir en tableau de nombres
