@@ -3,18 +3,23 @@
     <section class="a">
       <p>Ajouter :</p>
       <StyledBoutton>
-        <BouttonExo />
+        <button @click="changerAjout('matiere')">Une matière</button>
       </StyledBoutton>
       <StyledBoutton>
-        <Bouttonmatiere />
+        <button @click="changerAjout('chapitre')">Un chapitre</button>
       </StyledBoutton>
       <StyledBoutton>
-        <Bouttoncompetence />
+        <button @click="changerAjout('competence')">Une compétence</button>
       </StyledBoutton>
+      <StyledBoutton>
+        <button @click="changerAjout('exercice')">Un exercice</button>
+      </StyledBoutton>
+      
       <h1>Promo :</h1>
       <ul>
-        <li v-for="promo in promos" :key="promo.id">
-          <router-link :to="`/ajout/${promo.nom}`">{{ promo.nom }}</router-link> <!-- Affichage des données -->
+        <li v-for="promo in promos" :key="promo.nom">
+          <!-- Le lien vers la promo reste le même -->
+          <router-link :to="`/ajout/promo/${promo.nom}`">{{ promo.nom }}</router-link>
         </li>
       </ul>
     </section>
@@ -24,27 +29,29 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import StyledContainer from '../styleslide.vue';
-import BouttonExo from '../prof/ajoutexo.vue';
-import Bouttonmatiere from '../prof/ajoutmatiere.vue';
-import Bouttoncompetence from '../prof/ajoutcompetence.vue';
 import StyledBoutton from '../stylebouton.vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const promos = ref([]);
 
+// Fonction de récupération des promos (tel que tu l'avais)
 async function fetchPromos() {
   try {
-    console.log(localStorage.getItem('token'));
-
-    const token = localStorage.getItem('token'); // Récupère le token stocké
+    const token = localStorage.getItem('token');
     if (!token) {
-      throw new Error("Token manquant, l'utilisateur n'est peut-être pas connecté.");
+      console.error("❌ Token manquant, l'utilisateur n'est pas connecté.");
+      return;
     }
+
+    console.log("📡 Récupération des promotions...");
 
     const response = await fetch(`${import.meta.env.VITE_API_URL}/api/prof/promo`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // Ajout du token pour l'authentification
+        'Authorization': `Bearer ${token}`
       },
     });
 
@@ -52,14 +59,29 @@ async function fetchPromos() {
       throw new Error(`Erreur serveur: ${response.status}`);
     }
 
-    promos.value = await response.json();
+    const data = await response.json();
+    console.log("✅ Réponse API reçue :", data);
+
+    if (Array.isArray(data) && typeof data[0] === "string") {
+      promos.value = data.map(nom => ({ nom })); 
+    } else {
+      promos.value = data;
+    }
+
+    console.log("📊 Promotions stockées :", promos.value);
   } catch (error) {
-    console.error("Erreur lors de la récupération des promos :", error);
+    console.error("🚨 Erreur lors de la récupération des promos :", error);
   }
 }
 
-// Charger les promos au montage du composant
 onMounted(fetchPromos);
+
+
+// Fonction appelée au clic sur un bouton pour modifier la route
+function changerAjout(valeur) {
+  // Redirige vers /ajout/valeur
+  router.push(`/ajout/${valeur}`);
+}
 </script>
 
 <style scoped>
@@ -73,7 +95,7 @@ h1 {
 }
 li a{
   margin-top: 5px;
-  list-style:none;
+  list-style: none;
   text-decoration: none;
   color: inherit;
 }

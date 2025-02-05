@@ -1,61 +1,63 @@
 CREATE TABLE Utilisateur (
-    id_utilisateur SERIAL  PRIMARY KEY,
+    id_utilisateur SERIAL PRIMARY KEY,
     nom VARCHAR(100),
     prenom VARCHAR(100),
-    email VARCHAR(100) unique,
+    email VARCHAR(100) UNIQUE,
     mot_de_passe VARCHAR(100),
-    actif bool
+    actif BOOL
 );
 
 CREATE TABLE Promotion (
-    id_promotion SERIAL  PRIMARY KEY,
+    id_promotion SERIAL PRIMARY KEY,
     nom VARCHAR(100),
     annee INT,
     code_inscription INT
 );
+
 CREATE TABLE Status (
     id_status SERIAL PRIMARY KEY,
     nom VARCHAR(100)
 );
 
 CREATE TABLE Role (
-    id_role SERIAL  PRIMARY KEY,
+    id_role SERIAL PRIMARY KEY,
     nom VARCHAR(100)
 );
+
 CREATE TABLE Matiere (
-    id_matiere  SERIAL PRIMARY KEY,
+    id_matiere SERIAL PRIMARY KEY,
     nom VARCHAR(100)
 );
 
 CREATE TABLE Question_type (
-    id_question_type  SERIAL PRIMARY KEY,
+    id_question_type SERIAL PRIMARY KEY,
     nom VARCHAR(100)
 );
 
 CREATE TABLE Poids (
-    id_poids  SERIAL PRIMARY KEY,
+    id_poids SERIAL PRIMARY KEY,
     nom VARCHAR(100),
     valeur INT
 );
 
 CREATE TABLE Chapitre (
-    id_chapitre  SERIAL PRIMARY KEY,
+    id_chapitre SERIAL PRIMARY KEY,
     nom VARCHAR(100),
     ordre INT,
     description VARCHAR(1000),
     id_matiere INT,
-    FOREIGN KEY (id_matiere) REFERENCES Matiere(id_matiere)
+    FOREIGN KEY (id_matiere) REFERENCES Matiere(id_matiere) ON DELETE CASCADE
 );
 
 CREATE TABLE Competence (
-    id_competence  SERIAL PRIMARY KEY,
+    id_competence SERIAL PRIMARY KEY,
     nom VARCHAR(100),
     ordre INT,
     description VARCHAR(100),
     id_chapitre INT,
     id_poids INT,
-    FOREIGN KEY (id_chapitre) REFERENCES Chapitre(id_chapitre),
-    FOREIGN KEY (id_poids) REFERENCES Poids(id_poids)
+    FOREIGN KEY (id_chapitre) REFERENCES Chapitre(id_chapitre) ON DELETE CASCADE,
+    FOREIGN KEY (id_poids) REFERENCES Poids(id_poids) ON DELETE CASCADE
 );
 
 CREATE TABLE Question (
@@ -65,22 +67,23 @@ CREATE TABLE Question (
     id_competence INT,
     id_poids INT,
     id_question_type INT,
-    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
-    FOREIGN KEY (id_poids) REFERENCES Poids(id_poids),
-    FOREIGN KEY (id_question_type) references Question_type(id_question_type)
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence) ON DELETE CASCADE,
+    FOREIGN KEY (id_poids) REFERENCES Poids(id_poids) ON DELETE CASCADE,
+    FOREIGN KEY (id_question_type) REFERENCES Question_type(id_question_type) ON DELETE CASCADE
 );
 
 CREATE TABLE Reponse (
     reponse VARCHAR(100),
     explication VARCHAR(100),
     id_question INT,
-    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+    FOREIGN KEY (id_question) REFERENCES Question(id_question) ON DELETE CASCADE
 );
+
 CREATE TABLE Question_assignement (
     id_competence INT,
     id_question INT,
-    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
-    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence) ON DELETE CASCADE,
+    FOREIGN KEY (id_question) REFERENCES Question(id_question) ON DELETE CASCADE
 );
 
 CREATE TABLE Proposition (
@@ -89,79 +92,81 @@ CREATE TABLE Proposition (
     explication VARCHAR(100),
     est_correcte BOOL,
     id_question INT,
-    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+    FOREIGN KEY (id_question) REFERENCES Question(id_question) ON DELETE CASCADE
 );
 
 CREATE TABLE Tentative (
     id_tentative SERIAL PRIMARY KEY,
-    tentative_date date,
+    tentative_date DATE,
     enonce VARCHAR(100),
     id_utilisateur INT,
     id_question INT,
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
-    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_question) REFERENCES Question(id_question) ON DELETE CASCADE
 );
 
 CREATE TABLE Tentative_assignement (
     id_tentative INT,
     id_proposition INT,
-    FOREIGN KEY (id_tentative) REFERENCES Tentative(id_tentative),
-    FOREIGN KEY (id_proposition) REFERENCES Proposition(id_proposition)
+    FOREIGN KEY (id_tentative) REFERENCES Tentative(id_tentative) ON DELETE CASCADE,
+    FOREIGN KEY (id_proposition) REFERENCES Proposition(id_proposition) ON DELETE CASCADE
 );
 
 CREATE TABLE Fichier (
     nom VARCHAR(100),
     contenu VARCHAR(100),
     id_question INT,
-    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+    FOREIGN KEY (id_question) REFERENCES Question(id_question) ON DELETE CASCADE
 );
 
 CREATE TABLE Email_verification (
     id_utilisateur INT,
     id_question INT,
-    FOREIGN KEY (id_utilisateur) REFERENCES Competence(id_competence),
-    FOREIGN KEY (id_question) REFERENCES Question(id_question)
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_question) REFERENCES Question(id_question) ON DELETE CASCADE
 );
+
 CREATE TABLE Role_assignement (
     id_role INT,
     id_utilisateur INT,
-    FOREIGN KEY (id_role) REFERENCES Role(id_role),
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+    FOREIGN KEY (id_role) REFERENCES Role(id_role) ON DELETE CASCADE,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE
 );
 
 CREATE TABLE Utilisateur_assignement (
     id_promotion INT,
     id_utilisateur INT,
-    FOREIGN KEY (id_promotion) REFERENCES Promotion(id_promotion),
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
+    FOREIGN KEY (id_promotion) REFERENCES Promotion(id_promotion) ON DELETE CASCADE,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE
 );
 
 CREATE TABLE PromoMatiere_assignement (
     id_promotion INT,
     id_matiere INT,
-    FOREIGN KEY (id_promotion) REFERENCES Promotion(id_promotion),
-    FOREIGN KEY (id_matiere) REFERENCES Matiere(id_matiere)
+    FOREIGN KEY (id_promotion) REFERENCES Promotion(id_promotion) ON DELETE CASCADE,
+    FOREIGN KEY (id_matiere) REFERENCES Matiere(id_matiere) ON DELETE CASCADE
 );
 
 CREATE TABLE Evaluation_auto (
     id_utilisateur INT,
     id_competence INT,
     id_status INT,
-    evaluation_auto_date date,
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
-    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
-    FOREIGN KEY (id_status) REFERENCES Status(id_status)
+    evaluation_auto_date DATE,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence) ON DELETE CASCADE,
+    FOREIGN KEY (id_status) REFERENCES Status(id_status) ON DELETE CASCADE
 );
 
 CREATE TABLE Auto_evaluation (
     id_utilisateur INT,
     id_competence INT,
     id_status INT,
-    auto_evaluation_date date,
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
-    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence),
-    FOREIGN KEY (id_status) REFERENCES Status(id_status)
+    auto_evaluation_date DATE,
+    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur) ON DELETE CASCADE,
+    FOREIGN KEY (id_competence) REFERENCES Competence(id_competence) ON DELETE CASCADE,
+    FOREIGN KEY (id_status) REFERENCES Status(id_status) ON DELETE CASCADE
 );
+
 
 
 

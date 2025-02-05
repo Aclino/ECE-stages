@@ -6,7 +6,7 @@ const pool = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = "fallback_secret";
+const SECRET_KEY = "votre_clé_secrète";
 const router = express.Router();
 
 router.use(cors());
@@ -47,7 +47,7 @@ router.post('/api/login', async (req, res) => {
         const token = jwt.sign(
             { id: utilisateur.id_utilisateur, email: utilisateur.email },
             SECRET_KEY,
-            { expiresIn: '1h' }
+            { expiresIn: '10h' }
         );
 
         res.status(200).json({
