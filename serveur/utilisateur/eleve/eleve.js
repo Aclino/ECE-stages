@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken'); // Assurez-vous que cette ligne est présente
 const router = express.Router();
-const pool = require('/Users/ismaelsaid/Documents/ECE-stages-1/serveur/db');
+const pool = require('../../db');
 
 const app = express();
 const SECRET_KEY = "fallback_secret";
