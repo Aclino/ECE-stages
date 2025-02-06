@@ -15,6 +15,31 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 // Récupérer les promotions
 // Récupérer les promotions
+const deleteCompetenceByName = async (req, res) => {
+    const { nom, id_chapitre } = req.body;
+
+    if (!nom || !id_chapitre) {
+        return res.status(400).json({ message: "Nom et id_chapitre sont requis." });
+    }
+
+    try {
+        const result = await pool.query(
+            'DELETE FROM competence.competence WHERE nom = $1 AND id_chapitre = $2 RETURNING *',
+            [nom, id_chapitre]
+        );
+
+        if (result.rowCount > 0) {
+            return res.status(200).json({ message: "Compétence supprimée avec succès." });
+        } else {
+            return res.status(404).json({ message: "Compétence introuvable." });
+        }
+    } catch (error) {
+        console.error("Erreur lors de la suppression de la compétence:", error);
+        return res.status(500).json({ message: "Erreur serveur." });
+    }
+};
+
+
 router.get('/api/promotions', verifyToken, async (req, res) => {
     try {
         const userId = req.userId;  // Correction ici
@@ -96,4 +121,202 @@ router.delete('/api/subjects/:id', verifyToken, async (req, res) => {
     }
 });
 
+router.use(cors());
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
+
+// Récupérer les chapitres
+router.get('/api/chapters', verifyToken, async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT c.id_chapitre AS id, c.nom, c.description, m.nom AS matiere_nom 
+             FROM competence.chapitre c
+             INNER JOIN competence.matiere m ON c.id_matiere = m.id_matiere`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error('Erreur lors de la récupération des chapitres:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Ajouter un chapitre
+router.post('/api/chapters', verifyToken, async (req, res) => {
+    const { nom, description, id_matiere } = req.body;
+    try {
+        const insertChapitre = await pool.query(
+            'INSERT INTO competence.chapitre (nom, description, id_matiere) VALUES ($1, $2, $3) RETURNING id_chapitre',
+            [nom, description, id_matiere]
+        );
+
+        res.status(201).json({ id: insertChapitre.rows[0].id_chapitre, nom, description, id_matiere });
+    } catch (err) {
+        console.error('Erreur lors de l’ajout du chapitre:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Supprimer un chapitre
+router.delete('/api/chapters/:id', verifyToken, async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM competence.chapitre WHERE id_chapitre = $1', [id]);
+        res.status(200).json({ message: 'Chapitre supprimé' });
+    } catch (err) {
+        console.error('Erreur lors de la suppression du chapitre:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+router.get('/api/competences/:id_chapitre', async (req, res) => {
+    const { id_chapitre } = req.params;
+    try {
+        console.log("ID du chapitre reçu:", id_chapitre);
+
+        const result = await pool.query(
+            `SELECT c.id_competence, c.nom, c.description, c.ordre, p.valeur AS poids 
+             FROM competence.competence c
+             INNER JOIN competence.poids p ON c.id_poids = p.id_poids
+             WHERE c.id_chapitre = $1
+             `,
+            [id_chapitre]
+        );
+
+        console.log("Toutes les compétences récupérées:", result.rows);
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Erreur lors de la récupération des compétences:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+router.post('/api/competences', verifyToken, async (req, res) => {
+    const { nom, description, ordre, id_chapitre, id_poids } = req.body;
+    try {
+        const insertCompetence = await pool.query(
+            'INSERT INTO competence.competence (nom, description, ordre, id_chapitre, id_poids) VALUES ($1, $2, $3, $4, $5) RETURNING id_competence',
+            [nom, description, ordre, id_chapitre, id_poids]
+        );
+        res.status(201).json({ id: insertCompetence.rows[0].id_competence, nom, description, ordre, id_chapitre, id_poids });
+    } catch (err) {
+        console.error("Erreur lors de l’ajout de la compétence:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+router.delete('/api/competences',verifyToken,deleteCompetenceByName,  async (req, res) => {
+    const { id } = req.params;
+    try {
+        await pool.query('DELETE FROM competence.competence WHERE id_competence = $1', [id]);
+        res.status(200).json({ message: 'Compétence supprimée' });
+    } catch (err) {
+        console.error("Erreur lors de la suppression de la compétence:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+// Récupérer les poids disponibles
+router.get('/api/poids', verifyToken, async (req, res) => {
+    try {
+        const result = await pool.query(
+            `SELECT id_poids, nom, valeur FROM competence.poids ORDER BY valeur DESC`
+        );
+        res.json(result.rows);
+    } catch (err) {
+        console.error("Erreur lors de la récupération des poids:", err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+// Ajouter une question avec propositions ou réponse
+
+
+router.use(cors());
+router.use(bodyParser.json());
+router.use(bodyParser.urlencoded({ extended: true }));
+
+// Ajouter une question avec propositions ou réponse
+router.post('/api/questions', verifyToken, async (req, res) => {
+    const { texte, type, propositions, reponse, id_competence } = req.body;
+
+    if (!id_competence) {
+        return res.status(400).json({ error: "La compétence associée est requise." });
+    }
+
+    try {
+        const result = await pool.query(
+            'INSERT INTO competence.question (enonce, id_question_type, id_competence) VALUES ($1, $2, $3) RETURNING id_question',
+            [texte, type, id_competence]
+        );
+
+        const id_question = result.rows[0].id_question;
+
+        if (type === 1 && propositions.length > 0) { // Type QCM
+            for (const prop of propositions) {
+                await pool.query(
+                    'INSERT INTO competence.proposition (id_question, enonce, est_correcte) VALUES ($1, $2, FALSE)',
+                    [id_question, prop]
+                );
+            }
+        } else if (type === 2 && reponse) { // Type Question ouverte
+            await pool.query(
+                'INSERT INTO competence.reponse (id_question, reponse) VALUES ($1, $2)',
+                [id_question, reponse]
+            );
+        }
+
+        res.status(201).json({ message: 'Question ajoutée avec succès', id_question });
+    } catch (err) {
+        console.error('Erreur lors de l’ajout de la question:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+
+
+
+// Récupérer toutes les questions avec leurs propositions ou réponse
+router.get('/api/questions', async (req, res) => {
+    try {
+        const questions = await pool.query('SELECT id_question AS id, enonce AS texte, id_question_type AS type FROM competence.question');
+        const data = [];
+
+        for (const question of questions.rows) {
+            let propositions = [];
+            let reponse = null;
+
+            if (question.type === 1) { // Type QCM
+                const result = await pool.query(
+                    'SELECT enonce FROM competence.proposition WHERE id_question = $1',
+                    [question.id]
+                );
+                propositions = result.rows.map(row => row.enonce);
+            } else if (question.type === 2) { // Type Question Ouverte
+                const result = await pool.query(
+                    'SELECT reponse FROM competence.reponse WHERE id_question = $1',
+                    [question.id]
+                );
+                reponse = result.rows.length > 0 ? result.rows[0].reponse : null;
+            }
+
+            data.push({
+                id: question.id,
+                texte: question.texte,
+                type: question.type,
+                propositions,
+                reponse
+            });
+        }
+
+        res.json(data);
+    } catch (err) {
+        console.error('Erreur lors de la récupération des questions:', err.message);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 module.exports = router;
+
+

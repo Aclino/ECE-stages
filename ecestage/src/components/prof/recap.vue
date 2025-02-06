@@ -11,6 +11,7 @@
               {{ matiere.matiere_nom }}
             </li>
           </ul>
+          
         </div>
         <div v-else>
           <p>Aucune matière associée à cette promotion.</p>
@@ -28,20 +29,27 @@
     </div>
     <div v-show="exo">
       <p>Affichage pour un exercice</p>
+      <formexo/>
     </div>
     <div v-show="chapitre">
       <p>Affichage pour un chapitre</p>
+      <formchapitre/>
     </div>
     <div v-show="competence">
       <p>Affichage pour une compétence</p>
+      <formcompetence/>
     </div>
   </div>
+  
 </template>
 
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import formmatiere from './formmatiere.vue';
+import formchapitre from './formchapitre.vue';
+import formcompetence from './formcompetence.vue';
+import formexo from './formexo.vue';
 const route = useRoute();
 const currentUrl = ref("");
 const promo = ref("");
