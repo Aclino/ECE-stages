@@ -237,6 +237,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 
 // Ajouter une question avec nom, propositions ou réponse liée à une compétence
+// Ajouter une question
 router.post('/api/questions', verifyToken, async (req, res) => {
     const { nom, texte, type, propositions, reponse, id_competence, id_poids } = req.body;
 
@@ -246,23 +247,23 @@ router.post('/api/questions', verifyToken, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO competence.question (nom, enonce, id_question_type, id_competence, id_poids) VALUES ($1, $2, $3, $4, $5) RETURNING id_question',
+            'INSERT INTO Question (nom, enonce, id_question_type, id_competence, id_poids) VALUES ($1, $2, $3, $4, $5) RETURNING id_question',
             [nom, texte, type, id_competence, id_poids]
         );
 
         const id_question = result.rows[0].id_question;
 
-        if (type === 1 && propositions.length > 0) { // Type QCM
+        if (type == 1 && propositions.length > 0) {
             for (const prop of propositions) {
                 await pool.query(
-                    'INSERT INTO competence.proposition (id_question, enonce, est_correcte) VALUES ($1, $2, FALSE)',
-                    [id_question, prop]
+                    'INSERT INTO Proposition (id_question, enonce, explication, est_correcte) VALUES ($1, $2, $3, $4)',
+                    [id_question, prop.enonce, prop.explication, prop.est_correcte]
                 );
             }
-        } else if (type === 2 && reponse) { // Type Question ouverte
+        } else if (type == 2 && reponse) {
             await pool.query(
-                'INSERT INTO competence.reponse (id_question, reponse) VALUES ($1, $2)',
-                [id_question, reponse]
+                'INSERT INTO Reponse (id_question, reponse, explication) VALUES ($1, $2, $3)',
+                [id_question, reponse.reponse, reponse.explication]
             );
         }
 
@@ -273,40 +274,34 @@ router.post('/api/questions', verifyToken, async (req, res) => {
     }
 });
 
-module.exports = router;
-
-
-
-
-
 // Récupérer toutes les questions avec leurs propositions ou réponse
 router.get('/api/questions', async (req, res) => {
     try {
-        const questions = await pool.query('SELECT id_question AS id, enonce AS texte, id_question_type AS type FROM competence.question');
+        const questions = await pool.query('SELECT id_question, enonce, id_question_type FROM Question');
         const data = [];
 
         for (const question of questions.rows) {
             let propositions = [];
             let reponse = null;
 
-            if (question.type === 1) { // Type QCM
+            if (question.id_question_type == 1) {
                 const result = await pool.query(
-                    'SELECT enonce FROM competence.proposition WHERE id_question = $1',
-                    [question.id]
+                    'SELECT enonce, explication, est_correcte FROM Proposition WHERE id_question = $1',
+                    [question.id_question]
                 );
-                propositions = result.rows.map(row => row.enonce);
-            } else if (question.type === 2) { // Type Question Ouverte
+                propositions = result.rows;
+            } else if (question.id_question_type == 2) {
                 const result = await pool.query(
-                    'SELECT reponse FROM competence.reponse WHERE id_question = $1',
-                    [question.id]
+                    'SELECT reponse, explication FROM Reponse WHERE id_question = $1',
+                    [question.id_question]
                 );
-                reponse = result.rows.length > 0 ? result.rows[0].reponse : null;
+                reponse = result.rows[0] || null;
             }
 
             data.push({
-                id: question.id,
-                texte: question.texte,
-                type: question.type,
+                id: question.id_question,
+                texte: question.enonce,
+                type: question.id_question_type,
                 propositions,
                 reponse
             });
