@@ -235,9 +235,10 @@ router.use(cors());
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-// Ajouter une question avec propositions ou réponse
+
+// Ajouter une question avec nom, propositions ou réponse liée à une compétence
 router.post('/api/questions', verifyToken, async (req, res) => {
-    const { texte, type, propositions, reponse, id_competence } = req.body;
+    const { nom, texte, type, propositions, reponse, id_competence, id_poids } = req.body;
 
     if (!id_competence) {
         return res.status(400).json({ error: "La compétence associée est requise." });
@@ -245,8 +246,8 @@ router.post('/api/questions', verifyToken, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO competence.question (enonce, id_question_type, id_competence) VALUES ($1, $2, $3) RETURNING id_question',
-            [texte, type, id_competence]
+            'INSERT INTO competence.question (nom, enonce, id_question_type, id_competence, id_poids) VALUES ($1, $2, $3, $4, $5) RETURNING id_question',
+            [nom, texte, type, id_competence, id_poids]
         );
 
         const id_question = result.rows[0].id_question;
@@ -271,6 +272,8 @@ router.post('/api/questions', verifyToken, async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+module.exports = router;
 
 
 
