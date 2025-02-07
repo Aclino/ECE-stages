@@ -6,7 +6,7 @@ const pool = require('../db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = "votre_clé_secrète";
+const SECRET_KEY = "fallback_secret";
 const router = express.Router();
 
 router.use(cors());
@@ -104,16 +104,16 @@ router.post('/api/inscription', async (req, res) => {
 router.get('/api/utilisateur', async (req, res) => {
     try {
         console.log("Headers reçus:", req.headers);
-        
+
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
-            
+
             return res.status(401).json({ error: 'Token manquant.' });
         }
 
         const decoded = jwt.verify(token, SECRET_KEY);
         console.log("Token décodé:", decoded);
-        
+
         const query = `
             SELECT u.nom, u.prenom, u.email, p.nom AS promo 
             FROM competence.utilisateur u
