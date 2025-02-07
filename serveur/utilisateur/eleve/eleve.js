@@ -22,6 +22,7 @@ app.use((req, res, next) => {
     next();
 });
 
+//Route pour recuperer la progression par chapitre
 router.get('/api/progression/:id_chapitre', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
@@ -53,6 +54,41 @@ router.get('/api/progression/:id_chapitre', async (req, res) => {
         const completed = parseInt(completedResult.rows[0].count, 10);
 
         res.json({ total, completed });
+    } catch (error) {
+        console.error('Erreur SQL :', error.message);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+//route pour recuperer la progression par competence
+router.get('/api/progression/competence/:id_competence', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({ error: 'Token manquant.' });
+        }
+
+        const decoded = jwt.verify(token, SECRET_KEY);
+        const userId = decoded.id;
+        const competenceId = req.params.id_competence;
+        const seuil = 4; // Nombre à modifier selon les besoins
+
+        // Compter les tentatives réussies pour cette compétence
+        const result = await pool.query(`
+            SELECT COUNT(*) as count
+            FROM competence.tentative_assignement ta
+            JOIN competence.tentative t ON ta.id_tentative = t.id_tentative
+            JOIN competence.proposition p ON ta.id_proposition = p.id_proposition
+            JOIN competence.question q ON p.id_question = q.id_question
+            WHERE t.id_utilisateur = $1
+            AND p.est_correcte = true
+            AND q.id_competence = $2
+        `, [userId, competenceId]);
+
+        const completed = parseInt(result.rows[0].count, 10);
+        const percentage = Math.min(Math.round((completed / seuil) * 100), 100);
+
+        res.json({ completed, total: seuil, percentage });
     } catch (error) {
         console.error('Erreur SQL :', error.message);
         res.status(500).json({ error: error.message });
