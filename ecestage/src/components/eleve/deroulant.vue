@@ -6,6 +6,7 @@ const matieres = ref([]); // Liste des matières
 const chapitres = ref([]);
 const competences = ref([]);
 const chapterProgression = reactive({});
+const competenceProgression = reactive({});
 
 // Fonction pour récupérer les données depuis l'API
 async function fetchAndDisplayData() {
@@ -28,7 +29,7 @@ async function fetchAndDisplayData() {
   }
 }
 
-//gere la barre de progression
+//gere la barre de progression pour les chapitres
 async function fetchChapterProgression(chapitreId) {
     try {
         const token = localStorage.getItem('token');
@@ -59,6 +60,30 @@ async function updateChapterProgression(chapitreId) {
     chapterProgression[chapitreId] = progression;
 }
 
+//gere la barre de progression par competence
+async function fetchCompetenceProgression(competenceId) {
+    try {
+        const token = localStorage.getItem('token');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/progression/competence/${competenceId}`, {
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` 
+            }
+        });
+        const data = await response.json();
+        return data.percentage || 0;
+    } catch (error) {
+        console.error('Erreur lors de la récupération de la progression de la compétence :', error);
+        return 0;
+    }
+}
+
+async function fetchCompetencesProgression() {
+    for (const competence of competences.value) {
+        competenceProgression[competence.id_competence] = await fetchCompetenceProgression(competence.id_competence);
+        console.log("Mise à jour de competenceProgression :", competenceProgression);
+    }
+}
 
 
 // Gestion des états ouverts/fermés
@@ -100,10 +125,12 @@ async function exo(mat,count) {
 
 
 // Appel des fonctions à l'initialisation
-onMounted(() => {
-  fetchAndDisplayData();
-  fetchProgression();
+onMounted(async () => {
+  await fetchAndDisplayData();  // Assurez-vous que les données sont chargées
+  await fetchProgression();     // Charge la progression des chapitres
+  await fetchCompetencesProgression(); // Charge la progression des compétences
 });
+
 
 // Calcul du pourcentage de progression
 const progressionPercentage = computed(() => {
@@ -150,13 +177,18 @@ const progressionPercentage = computed(() => {
                                 <transition name="slide">
                                     <ul v-if="openState[chapitre.nom]" class="competence">
                                         <li v-for="competence in competences.filter(j => j.id_chapitre === chapitre.id_chapitre)" 
-                                            :key="competence.id_chapitre" 
+                                            :key="competence.id_competence" 
                                             class="competence-item">
                                             <span>
                                                 {{ competence.nom }}
-                                                <router-link to="/exo"><button  @click="exo(competence.nom,3)">Exercice</button></router-link>
+                                                <div class="progress-container">
+                                                    <div class="progress-bar">
+                                                        <div class="progress" :style="{ width: (competenceProgression[competence.id_competence] || 0) + '%' }"></div>
+                                                    </div>
+                                                    <span class="percentage">{{ competenceProgression[competence.id_competence] || 0 }}%</span>
+                                                </div>
+                                                <router-link to="/exo"><button @click="exo(competence.nom,3)">Exercice</button></router-link>
                                             </span>
-                                            
                                         </li>
                                     </ul>
                                 </transition>
@@ -338,6 +370,34 @@ button:hover::after {
 
 .percentage {
     font-size: 0.9em;
+    font-weight: bold;
+    color: #4caf50;
+}
+
+.progress-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: 10px;
+}
+
+.progress-bar {
+    width: 80px;
+    height: 8px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.progress {
+    height: 100%;
+    background-color: #4caf50;
+    transition: width 0.4s ease-in-out;
+}
+
+.percentage {
+    font-size: 0.8em;
     font-weight: bold;
     color: #4caf50;
 }
