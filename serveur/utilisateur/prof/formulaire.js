@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const pool = require('../../db');
 const verifyToken = require('../../mildleware/midleware');
 
-const SECRET_KEY = process.env.SECRET_KEY || "votre_clé_secrète";
+
 const router = express.Router();
 
 router.use(cors());

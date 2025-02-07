@@ -6,7 +6,7 @@ import LoginPage from '../views/LoginPage.vue';
 import RegisterPage from '../views/RegisterPage.vue';
 import ajoutPage from '../views/ProfajoutPage.vue';
 import ProfajoutPage from '../views/ProfajoutPage.vue';
-
+import {isTokenExpired} from '../../fonctionjs.js/fonctionjs';
 const routes = [
   { path: '/', component: DeroulantPage, meta: { requiresAuth: true } },
   { path: '/exo/:ids', component: ExoPage, meta: { requiresAuth: true } },
@@ -29,20 +29,27 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
 
-  /*/ Si l'utilisateur est déjà connecté et essaie d'accéder à la page de login, redirige vers la page d'accueil
-  if (to.path === '/login' && token) {
-    console.warn('L\'utilisateur est déjà connecté, redirection vers la page d\'accueil');
-    next('/'); // Redirige l'utilisateur vers la page d'accueil si déjà connecté
+  if (token && isTokenExpired(token)) {
+    console.warn('Token expiré, suppression et redirection vers /login.');
+    localStorage.removeItem('token'); // Supprime le token expiré
+    next('/login');
     return;
-  }*/
+  }
 
-  // Si la route nécessite une authentification, vérifie le token
+  if (to.path === '/login' && token) {
+    console.warn('Utilisateur déjà connecté, redirection vers la page d\'accueil');
+    next('/');
+    return;
+  }
+
   if (to.meta.requiresAuth && !token) {
     console.warn('Accès interdit. Redirection vers /login.');
-    next('/login'); // Redirige vers la page de connexion si le token est manquant
+    next('/login');
   } else {
-    next(); // Continue la navigation
+    next();
   }
 });
+
+
 
 export default router;

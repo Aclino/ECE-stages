@@ -4,7 +4,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const jwt = require('jsonwebtoken'); // Ajout pour décoder le token
 const pool = require('../../db');
-const SECRET_KEY = "votre_clé_secrète";
+const SECRET_KEY = "fallback_secret";
 const router = express.Router();
 
 

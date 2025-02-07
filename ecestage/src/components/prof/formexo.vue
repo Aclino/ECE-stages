@@ -13,72 +13,119 @@
     </div>
 
     <!-- Sélection du chapitre -->
-    <div v-if="selectedMatiere">
+    <div >
       <label for="chapitre">Chapitre :</label>
-      <select v-model="selectedChapitre" @change="chargerCompetences">
+      <select v-model="selectedChapitre" @change="chargerCompetences" v-if="selectedMatiere">
         <option v-for="chapitre in chapitres" :key="chapitre.id" :value="chapitre.id">
           {{ chapitre.nom }}
         </option>
       </select>
+      <p v-else>Veuillez choisir une matière</p>
     </div>
 
     <!-- Sélection des compétences -->
-    <div v-if="selectedChapitre">
+    <div >
       <label for="competence">Compétence :</label>
-      <select v-model="nouvelleQuestion.id_competence" @change="chargerPoids" required>
+      <select v-model="nouvelleQuestion.id_competence" @change="chargerPoids" required v-if="selectedChapitre">
   <option value="">Choisissez une compétence</option>
   <option v-for="competence in competences" :key="competence.id_competence" :value="Number(competence.id_competence)">
     {{ competence.nom }}
   </option>
 </select>
-
+<p v-else>Veuillez choisir un chapitre</p>
     </div>
 
     <!-- Formulaire de création de question (visible seulement si une compétence est sélectionnée) -->
-    <form v-if="nouvelleQuestion.id_competence" @submit.prevent="ajouterQuestion" >
+    <form  @submit.prevent="ajouterQuestion" >
 
       <div>
-        <label for="question">Nom de la question :</label>
-        <input type="text" v-model="nouvelleQuestion.nom" required />
-      </div>
+  <label for="question">Nom de la question :</label>
+  <textarea v-model="nouvelleQuestion.nom" 
+            ref="nom" 
+            @input="ajusterTaille('nom')"
+            rows="1"
+            class="editable" required></textarea>
+</div>
 
       <div>
-        <label for="question">Question :</label>
-        <input type="text" v-model="nouvelleQuestion.texte" required />
-      </div>
-
+  <label for="question">Question :</label>
+  <textarea v-model="nouvelleQuestion.texte" 
+            ref="texte" 
+            @input="ajusterTaille('texte')"
+            rows="1"
+            class="editable" required></textarea>
+</div>
+      <div class="typepoids">
       <div>
-        <label for="type">Type de question :</label>
-        <select v-model="nouvelleQuestion.type">
-          <option value="1">QCM</option>
-          <option value="2">Question ouverte</option>
-        </select>
-      </div>
+  <label>Type de question :</label>
+  <div>
+    <input 
+      type="radio" 
+      id="qcm" 
+      value="1" 
+      v-model="nouvelleQuestion.type"
+    />
+    <label for="qcm">QCM</label>
+  </div>
+  
+  <div>
+    <input 
+      type="radio" 
+      id="ouverte" 
+      value="2" 
+      v-model="nouvelleQuestion.type"
+    />
+    <label for="ouverte">Question ouverte</label>
+  </div>
+</div>
 
-      <div>
-        <label for="type">Poids:</label>
-        <select v-model="nouvelleQuestion.id_poids">
-          <option v-for="poid in poids" :key="poid.id_poids" :value="Number(poid.id_poids)">
+      <div class="poids">
+  <label>Poids :</label>
+  <div v-for="poid in poids" :key="poid.id_poids">
+    <input 
+      type="radio" 
+      :value="Number(poid.id_poids)" 
+      v-model="nouvelleQuestion.id_poids"
+    />
     {{ poid.nom }}
-  </option>
-        </select>
-      </div>
+  </div>
+</div>
+</div>
 
       <div v-if="nouvelleQuestion.type == 1">
-        <label>Propositions :</label>
-        <div v-for="(proposition, index) in nouvelleQuestion.propositions" :key="index">
-          <input type="text" v-model="nouvelleQuestion.propositions[index]" />
-          <button type="button" @click="supprimerProposition(index)">Supprimer</button>
-        </div>
-        <button type="button" @click="ajouterProposition">Ajouter une proposition</button>
-      </div>
+  <h3>Propositions</h3>
+  <div class="prop" v-for="(proposition, index) in nouvelleQuestion.propositions" :key="index">
+    <div class="organisation">
+      <input type="text" v-model="proposition.enonce" placeholder="Enoncé" />
+    <label> proposition correcte :</label>
+    <input type="checkbox" v-model="proposition.est_correcte" />
+    </div>
+    <div class="orga">
+     <input type="text" v-model="proposition.explication" placeholder="Explication" />
+    <button @click="supprimerProposition(index)">Supprimer</button> 
+    </div>
+    
+  </div>
+  <button @click="ajouterProposition">Ajouter une proposition</button>
+</div>
 
-      <div v-if="nouvelleQuestion.type == 2">
-        <label for="reponse">Réponse :</label>
-        <input type="text" v-model="nouvelleQuestion.reponse" />
-      </div>
+<div v-else>
+  <label>Réponse :</label>
+  <textarea v-model="nouvelleQuestion.reponse.reponse"
+            ref="reponse"
+            @input="ajusterTaille"
+            rows="1"
+            class="editable"></textarea>
+            <label>explication :</label>
+  <textarea v-model="nouvelleQuestion.reponse.explication"
+            ref="explication"
+            @input="ajusterTaille"
+            rows="1"
+            class="editable"></textarea>
+</div>
 
-      <button type="submit">Ajouter</button>
+
+      <button @click="ajouterProposition">Ajouter la question</button>
     </form>
   </div>
 </template>
@@ -100,8 +147,10 @@ export default {
         type: "",
         id_competence: "",
         id_poids:"",
-        propositions: [],
-        reponse: ""
+        propositions: [
+          
+      ],
+        reponse: []
       },
       token: localStorage.getItem('token') || ""
     };
@@ -200,13 +249,33 @@ export default {
 }
 
 ,
-    ajouterProposition() {
-      this.nouvelleQuestion.propositions.push("");
-    },
+ajouterProposition() {
+  this.nouvelleQuestion.propositions.push({
+    enonce: "",
+    est_correcte: false,
+    explication: ""
+  });
+},
+ajouterReponse(){
+  this.nouvelleQuestion.reponse.push({
+    reponse:"",
+    explication:""
+  })
+}
+,
     supprimerProposition(index) {
       this.nouvelleQuestion.propositions.splice(index, 1);
-    }
-  },
+    },
+    
+  ajusterTaille(refName) {
+    this.$nextTick(() => {
+      const textarea = this.$refs[refName];
+      textarea.style.height = "auto"; // Réinitialise la hauteur
+      textarea.style.height = textarea.scrollHeight + "px"; // Ajuste la hauteur
+    });
+  }
+
+},
   mounted() {
     this.chargerMatieres();
   }
@@ -224,4 +293,35 @@ export default {
 button {
   margin-top: 10px;
 }
+.typepoids,.organisation,.orga{
+  display : flex;
+  flex-direction: row;
+
+}
+.prop{
+  display:flex;
+  flex-direction:column;
+}
+.poids{
+ margin-left: 10px;
+}
+.formexo { 
+     margin: 5vh;
+     margin-left: 50vh;
+     background-color: aliceblue;
+     border-radius: 10px;
+     height: 75vh;
+     
+ }
+ .editable {
+  width: 100%;
+  min-height: 30px;
+  max-height: 300px; /* Facultatif : limite la hauteur */
+  overflow-y: hidden;
+  resize: none;
+  padding: 5px;
+  border: 1px solid #ccc;
+}
+
+
 </style>
