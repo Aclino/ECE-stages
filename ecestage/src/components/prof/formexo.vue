@@ -1,10 +1,47 @@
-<template>
+<template> 
   <div class="formexo">
     <h2>Créer une nouvelle question</h2>
 
-    <!-- Existing subject, chapter, competence, and weight selectors remain the same -->
-    
-    <form @submit.prevent="ajouterQuestion">
+    <!-- Sélection de la matière -->
+    <div>
+      <label for="matiere">Matière :</label>
+      <select v-model="selectedMatiere" @change="chargerChapitres">
+        <option v-for="matiere in matieres" :key="matiere.id" :value="matiere.id">
+          {{ matiere.nom }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Sélection du chapitre -->
+    <div v-if="selectedMatiere">
+      <label for="chapitre">Chapitre :</label>
+      <select v-model="selectedChapitre" @change="chargerCompetences">
+        <option v-for="chapitre in chapitres" :key="chapitre.id" :value="chapitre.id">
+          {{ chapitre.nom }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Sélection des compétences -->
+    <div v-if="selectedChapitre">
+      <label for="competence">Compétence :</label>
+      <select v-model="nouvelleQuestion.id_competence" @change="chargerPoids" required>
+  <option value="">Choisissez une compétence</option>
+  <option v-for="competence in competences" :key="competence.id_competence" :value="Number(competence.id_competence)">
+    {{ competence.nom }}
+  </option>
+</select>
+
+    </div>
+
+    <!-- Formulaire de création de question (visible seulement si une compétence est sélectionnée) -->
+    <form v-if="nouvelleQuestion.id_competence" @submit.prevent="ajouterQuestion" >
+
+      <div>
+        <label for="question">Nom de la question :</label>
+        <input type="text" v-model="nouvelleQuestion.nom" required />
+      </div>
+
       <div>
         <label for="question">Question :</label>
         <input type="text" v-model="nouvelleQuestion.texte" required />
@@ -18,25 +55,27 @@
         </select>
       </div>
 
-      <!-- QCM Specific Fields -->
+      <div>
+        <label for="type">Poids:</label>
+        <select v-model="nouvelleQuestion.id_poids">
+          <option v-for="poid in poids" :key="poid.id_poids" :value="Number(poid.id_poids)">
+    {{ poid.nom }}
+  </option>
+        </select>
+      </div>
+
       <div v-if="nouvelleQuestion.type == 1">
-        <div v-for="(proposition, index) in nouvelleQuestion.propositions" :key="index" class="proposition-group">
-          <input type="text" v-model="proposition.enonce" placeholder="Énoncé de la proposition" />
-          <input type="text" v-model="proposition.explication" placeholder="Explication" />
-          <label>
-            <input type="checkbox" v-model="proposition.est_correcte" />
-            Correcte
-          </label>
+        <label>Propositions :</label>
+        <div v-for="(proposition, index) in nouvelleQuestion.propositions" :key="index">
+          <input type="text" v-model="nouvelleQuestion.propositions[index]" />
           <button type="button" @click="supprimerProposition(index)">Supprimer</button>
         </div>
         <button type="button" @click="ajouterProposition">Ajouter une proposition</button>
       </div>
 
-      <!-- Question Ouverte Specific Fields -->
       <div v-if="nouvelleQuestion.type == 2">
-        <label>Réponse :</label>
-        <input type="text" v-model="nouvelleQuestion.reponse.reponse" placeholder="Réponse" />
-        <input type="text" v-model="nouvelleQuestion.reponse.explication" placeholder="Explication de la réponse" />
+        <label for="reponse">Réponse :</label>
+        <input type="text" v-model="nouvelleQuestion.reponse" />
       </div>
 
       <button type="submit">Ajouter</button>
@@ -44,78 +83,145 @@
   </div>
 </template>
 
+
 <script>
 export default {
   data() {
     return {
-      // ... previous data properties ...
+      matieres: [],
+      chapitres: [],
+      competences: [],
+      poids:[],
+      selectedMatiere: null,
+      selectedChapitre: null,
       nouvelleQuestion: {
-        nom: "Question",
+        nom:"",
         texte: "",
-        type: "1",
-        id_competence: null,
-        id_poids: 1,
+        type: "",
+        id_competence: "",
+        id_poids:"",
         propositions: [],
-        reponse: {
-          reponse: "",
-          explication: ""
-        }
-      }
+        reponse: ""
+      },
+      token: localStorage.getItem('token') || ""
     };
-  },
+  }
+,
   methods: {
-    // ... previous methods ...
-    ajouterProposition() {
-      this.nouvelleQuestion.propositions.push({
-        enonce: "",
-        explication: "",
-        est_correcte: false
-      });
+    async chargerMatieres() {
+      try {
+        const response = await fetch('http://localhost:3001/api/subjects', {
+          headers: { 'Authorization': `Bearer ${this.token}` }
+        });
+        this.matieres = await response.json();
+      } catch (error) {
+        console.error('Erreur lors du chargement des matières:', error);
+      }
+    },
+    async chargerChapitres() {
+      try {
+        this.selectedChapitre = null;
+        const response = await fetch(`http://localhost:3001/api/chapters?matiere=${this.selectedMatiere}`, {
+          headers: { 'Authorization': `Bearer ${this.token}` }
+        });
+        this.chapitres = await response.json();
+      } catch (error) {
+        console.error('Erreur lors du chargement des chapitres:', error);
+      }
+    },
+    async chargerCompetences() {
+      try {
+        this.competences = [];
+        const response = await fetch(`http://localhost:3001/api/competences/${this.selectedChapitre}`, {
+          headers: { 'Authorization': `Bearer ${this.token}` }
+        });
+        this.competences = await response.json();
+        console.log("Compétences chargées :", this.competences);
+      } catch (error) {
+        console.error('Erreur lors du chargement des compétences:', error);
+      }
+    },
+    async chargerPoids(){
+      try {
+        this.poids=[];
+        const reponse=await fetch(`http://localhost:3001/api/poids`,{
+          method:'GET',
+          headers: { 'Authorization': `Bearer ${this.token}` }
+        });
+        this.poids =await reponse.json();
+
+        console.log("pois :",this.poids)
+      } catch (error) {
+        console.error('Erreur lors du chargement des poids:', error);
+      }
     },
     async ajouterQuestion() {
-      if (!this.nouvelleQuestion.id_competence) {
-        alert("Veuillez sélectionner une compétence.");
-        return;
-      }
+  console.log("Valeur actuelle de id_competence :", this.nouvelleQuestion.id_competence);
 
-      try {
-        const response = await fetch('http://localhost:3001/api/questions', {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.token}`
-          },
-          body: JSON.stringify({
-            nom: this.nouvelleQuestion.nom,
-            texte: this.nouvelleQuestion.texte,
-            type: this.nouvelleQuestion.type,
-            propositions: this.nouvelleQuestion.propositions,
-            reponse: this.nouvelleQuestion.type === 2 ? this.nouvelleQuestion.reponse : null,
-            id_competence: this.nouvelleQuestion.id_competence,
-            id_poids: this.nouvelleQuestion.id_poids
-          })
-        });
+  if (!this.nouvelleQuestion.id_competence || isNaN(this.nouvelleQuestion.id_competence)) {
+    alert("Veuillez sélectionner une compétence avant d'ajouter la question.");
+    return;
+  }
 
-        if (response.ok) {
-          alert("Question ajoutée avec succès !");
-          this.resetFormulaire();
-        } else {
-          const errorData = await response.json();
-          alert("Erreur : " + errorData.error);
-        }
-      } catch (error) {
-        console.error('Erreur:', error);
-        alert("Une erreur s'est produite.");
-      }
+  try {
+    const payload = {
+      nom:this.nouvelleQuestion.nom,
+      texte: this.nouvelleQuestion.texte,
+      type: this.nouvelleQuestion.type,
+      id_competence: Number(this.nouvelleQuestion.id_competence), // Convertir en nombre
+      id_poids:Number(this.nouvelleQuestion.id_poids),
+      propositions: this.nouvelleQuestion.propositions,
+      reponse: this.nouvelleQuestion.reponse
+    };
+
+    console.log("Données envoyées :", payload);
+
+    await fetch('http://localhost:3001/api/questions', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${this.token}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    // Réinitialisation sans toucher à id_competence
+    this.nouvelleQuestion = {
+      ...this.nouvelleQuestion, 
+      texte: "",
+      type: "1",
+      propositions: [],
+      reponse: ""
+    };
+
+  } catch (error) {
+    console.error("Erreur lors de l'ajout de la question:", error);
+  }
+}
+
+,
+    ajouterProposition() {
+      this.nouvelleQuestion.propositions.push("");
+    },
+    supprimerProposition(index) {
+      this.nouvelleQuestion.propositions.splice(index, 1);
     }
+  },
+  mounted() {
+    this.chargerMatieres();
   }
 };
 </script>
 
 <style scoped>
-.proposition-group {
+.formexo {
+  max-width: 500px;
+  margin: auto;
   display: flex;
+  flex-direction: column;
   gap: 10px;
-  margin-bottom: 10px;
+}
+button {
+  margin-top: 10px;
 }
 </style>

@@ -63,8 +63,7 @@ router.get('/api/promotions', verifyToken, async (req, res) => {
 // Récupérer les matières assignées
 router.get('/api/subjects', verifyToken, async (req, res) => {
     try {
-        const userId = req.userId;  // Correction ici
-
+        console.log('Requête reçue pour les matières, userID:', req.userId);
         const result = await pool.query(
             `SELECT m.id_matiere AS id, m.nom, p.id_promotion, p.nom AS promo_nom 
              FROM competence.promomatiere_assignement pm
@@ -72,10 +71,10 @@ router.get('/api/subjects', verifyToken, async (req, res) => {
              INNER JOIN competence.promotion p ON pm.id_promotion = p.id_promotion
              INNER JOIN competence.utilisateur_assignement up ON p.id_promotion = up.id_promotion
              WHERE up.id_utilisateur = $1`,
-            [userId]
+            [req.userId]
         );
 
-        console.log('Résultat des matières:', result.rows);
+        console.log('Matières récupérées depuis la BDD:', result.rows);
         res.json(result.rows);
     } catch (err) {
         console.error('Erreur lors de la récupération des matières:', err.message);
@@ -127,18 +126,27 @@ router.use(bodyParser.urlencoded({ extended: true }));
 
 // Récupérer les chapitres
 router.get('/api/chapters', verifyToken, async (req, res) => {
+    const { matiere } = req.query;  // Récupère l'ID de la matière
+
     try {
-        const result = await pool.query(
-            `SELECT c.id_chapitre AS id, c.nom, c.description, m.nom AS matiere_nom 
-             FROM competence.chapitre c
-             INNER JOIN competence.matiere m ON c.id_matiere = m.id_matiere`
-        );
+        let query = `SELECT c.id_chapitre AS id, c.nom, c.description, m.nom AS matiere_nom 
+                     FROM competence.chapitre c
+                     INNER JOIN competence.matiere m ON c.id_matiere = m.id_matiere`;
+        let values = [];
+
+        if (matiere) {
+            query += ` WHERE c.id_matiere = $1`;
+            values.push(matiere);
+        }
+
+        const result = await pool.query(query, values);
         res.json(result.rows);
     } catch (err) {
         console.error('Erreur lors de la récupération des chapitres:', err.message);
         res.status(500).json({ error: err.message });
     }
 });
+
 
 // Ajouter un chapitre
 router.post('/api/chapters', verifyToken, async (req, res) => {
@@ -247,7 +255,7 @@ router.post('/api/questions', verifyToken, async (req, res) => {
 
     try {
         const result = await pool.query(
-            'INSERT INTO Question (nom, enonce, id_question_type, id_competence, id_poids) VALUES ($1, $2, $3, $4, $5) RETURNING id_question',
+            'INSERT INTO competence.question (nom, enonce, id_question_type, id_competence, id_poids) VALUES ($1, $2, $3, $4, $5) RETURNING id_question',
             [nom, texte, type, id_competence, id_poids]
         );
 
@@ -256,13 +264,13 @@ router.post('/api/questions', verifyToken, async (req, res) => {
         if (type == 1 && propositions.length > 0) {
             for (const prop of propositions) {
                 await pool.query(
-                    'INSERT INTO Proposition (id_question, enonce, explication, est_correcte) VALUES ($1, $2, $3, $4)',
+                    'INSERT INTO competence.proposition (id_question, enonce, explication, est_correcte) VALUES ($1, $2, $3, $4)',
                     [id_question, prop.enonce, prop.explication, prop.est_correcte]
                 );
             }
         } else if (type == 2 && reponse) {
             await pool.query(
-                'INSERT INTO Reponse (id_question, reponse, explication) VALUES ($1, $2, $3)',
+                'INSERT INTO competence.reponse (id_question, reponse, explication) VALUES ($1, $2, $3)',
                 [id_question, reponse.reponse, reponse.explication]
             );
         }
@@ -277,7 +285,7 @@ router.post('/api/questions', verifyToken, async (req, res) => {
 // Récupérer toutes les questions avec leurs propositions ou réponse
 router.get('/api/questions', async (req, res) => {
     try {
-        const questions = await pool.query('SELECT id_question, enonce, id_question_type FROM Question');
+        const questions = await pool.query('SELECT id_question, enonce, id_question_type FROM competence.question');
         const data = [];
 
         for (const question of questions.rows) {
@@ -286,13 +294,13 @@ router.get('/api/questions', async (req, res) => {
 
             if (question.id_question_type == 1) {
                 const result = await pool.query(
-                    'SELECT enonce, explication, est_correcte FROM Proposition WHERE id_question = $1',
+                    'SELECT enonce, explication, est_correcte FROM competence.proposition WHERE id_question = $1',
                     [question.id_question]
                 );
                 propositions = result.rows;
             } else if (question.id_question_type == 2) {
                 const result = await pool.query(
-                    'SELECT reponse, explication FROM Reponse WHERE id_question = $1',
+                    'SELECT reponse, explication FROM competence.reponse WHERE id_question = $1',
                     [question.id_question]
                 );
                 reponse = result.rows[0] || null;
