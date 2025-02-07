@@ -27,17 +27,16 @@ router.get('/api/matiere', async (req, res) => {
 });
 
 // ✅ Route pour récupérer les exercices liés aux maths
-// Route pour récupérer un exercice par ID
+// Mise à jour de la route pour récupérer un exercice par ID
 router.get('/api/exos', async (req, res) => {
     try {
-        // Récupérer l'ID depuis l'URL
+        console.log(req.body);
         const id = req.query.id;
-
         if (!id) {
             return res.status(400).json({ error: 'ID manquant dans la requête.' });
         }
 
-        // Requête SQL pour récupérer l'exercice avec un seul ID
+        // Requête SQL mise à jour pour inclure id_proposition
         const queryExo = `
             SELECT 
                 q.id_question,
@@ -47,6 +46,7 @@ router.get('/api/exos', async (req, res) => {
                 m.nom AS matiere_nom,
                 c.nom AS chapitre_nom,
                 c.description AS chapitre_description,
+                p.id_proposition,
                 p.enonce AS proposition_enonce,
                 p.explication AS proposition_explication,
                 p.est_correcte AS proposition_est_correcte,
@@ -64,12 +64,8 @@ router.get('/api/exos', async (req, res) => {
             WHERE q.id_question = $1;
         `;
 
-        // On passe l'ID à la requête SQL
         const resultExo = await pool.query(queryExo, [id]);
-
-        res.json({
-            exo: resultExo.rows
-        });
+        res.json({ exo: resultExo.rows });
     } catch (err) {
         console.error("Erreur interne :", err);
         res.status(500).json({ error: 'Erreur interne du serveur' });
@@ -160,4 +156,32 @@ router.get('/api/exos/questions/:ids', async (req, res) => {
         res.status(500).json({ error: 'Erreur interne du serveur' });
     }
 });
+
+router.post('/api/tentatives', async (req, res) => {
+    try {
+        const { id_utilisateur, id_question, id_propositions } = req.body;
+        if (!id_utilisateur || !id_question || !id_propositions.length) {
+            return res.status(400).json({ error: "Données invalides." });
+        }
+
+        const queryTentative = `
+            INSERT INTO competence.tentative (id_utilisateur, id_question, tentative_date)
+            VALUES ($1, $2, NOW()) RETURNING id_tentative;
+        `;
+        const resultTentative = await pool.query(queryTentative, [id_utilisateur, id_question]);
+        const id_tentative = resultTentative.rows[0].id_tentative;
+
+        const queryTentativeAssignement = `
+            INSERT INTO competence.tentative_assignement (id_tentative, id_proposition)
+            VALUES ${id_propositions.map((_, i) => `($1, $${i + 2})`).join(", ")};
+        `;
+        await pool.query(queryTentativeAssignement, [id_tentative, ...id_propositions]);
+
+        res.status(201).json({ message: "Tentative enregistrée avec succès." });
+    } catch (err) {
+        console.error("Erreur lors de l'insertion :", err);
+        res.status(500).json({ error: "Erreur interne du serveur." });
+    }
+});
+
 module.exports = router;

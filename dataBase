@@ -333,3 +333,11 @@ values
 INSERT INTO auto_evaluation (id_status , id_utilisateur, id_competence)
 VALUES 
     (1, 4, 8);
+
+-- Ajout de données dans la table utilisateur_assignement
+INSERT INTO utilisateur_assignement (id_utilisateur, id_promotion)
+VALUES 
+    (5,1);
+
+ALTER TABLE tentative 
+ALTER COLUMN tentative_date TYPE TIMESTAMP USING tentative_date::TIMESTAMP;

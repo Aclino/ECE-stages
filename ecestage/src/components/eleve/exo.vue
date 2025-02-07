@@ -25,12 +25,17 @@ async function fetchAndDisplayData(id) {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
-
     if (!response.ok) throw new Error('Erreur lors de la récupération des données.');
-
     const data = await response.json();
-    enonce.value = data.exo[0].question_nom + " - " + data.exo[0].question_enonce;
-    reponses.value = data.exo;
+    console.log(data);
+
+    enonce.value = `${data.exo[0].question_nom} - ${data.exo[0].question_enonce}`;
+    reponses.value = data.exo.map(item => ({
+      id_proposition: item.id_proposition,
+      proposition_enonce: item.proposition_enonce,
+      proposition_explication: item.proposition_explication,
+      proposition_est_correcte: item.proposition_est_correcte
+    }));
 
     switch (data.exo[0].question_type) {
       case "QCU":
@@ -49,7 +54,6 @@ async function fetchAndDisplayData(id) {
         currentQuestionMode.value = 0;
         break;
     }
-
   } catch (error) {
     console.error('Erreur lors de l\'affichage des données :', error);
   }
@@ -88,17 +92,18 @@ function nextQuestion() {
   showError.value = false;
 }
 
-function onSubmit() {
+async function onSubmit() {
   showError.value = false;
   showResult.value = false;
 
   if (validateForm(userAnswers.value)) {
     showError.value = false;
+    await saveAttempt(); // Enregistre la tentative en base de données
 
     if (checkAnswers(userAnswers.value, reponses.value)) {
       resultMessage.value = "Bravo ! Vous avez trouvé la bonne réponse !";
     } else {
-      resultMessage.value = `Dommage, vous n'avez pas trouvé la bonne réponse.${{userAnswers}}`;
+      resultMessage.value = `Dommage, vous n'avez pas trouvé la bonne réponse.${{ userAnswers }}`;
     }
 
     showResult.value = true;
@@ -106,6 +111,7 @@ function onSubmit() {
     showError.value = true;
   }
 }
+
 
 function validateForm(answers) {
   return Array.isArray(answers) ? answers.length > 0 : answers.trim() !== "";
@@ -138,6 +144,50 @@ function checkAnswers(answers, reponses) {
   }
   return propositionsBonnes.every(a => a === true);
 }
+
+//Fonction pour sauvgarder les tentatives
+// Mise à jour de saveAttempt() pour stocker id_proposition
+async function saveAttempt() {
+  try {
+    const token = localStorage.getItem("token"); 
+    if (!token) throw new Error("Utilisateur non authentifié.");
+    
+    const decodedToken = JSON.parse(atob(token.split(".")[1])); 
+    const userId = decodedToken.id; 
+    
+    const selectedPropositionIds = reponses.value
+      .filter(r => userAnswers.value.includes(r.proposition_enonce))
+      .map(r => r.id_proposition);
+
+    if (selectedPropositionIds.length === 0) throw new Error("Aucune réponse sélectionnée.");
+
+    console.log(JSON.stringify({ id_utilisateur: userId, id_question: questionId.value, id_propositions: selectedPropositionIds }));
+    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/tentatives`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        id_utilisateur: userId,
+        id_question: questionId.value,
+        id_propositions: selectedPropositionIds,
+      }),
+    });
+    console.log("Tentative envoyée :", JSON.stringify({
+      id_utilisateur: userId,
+      id_question: questionId.value,
+      id_propositions: selectedPropositionIds
+    }));
+
+
+    if (!response.ok) throw new Error("Erreur lors de l'enregistrement de la tentative.");
+    console.log("Tentative enregistrée avec succès.");
+  } catch (error) {
+    console.error("Erreur lors de l'enregistrement :", error);
+  }
+}
+
 </script>
 
 <template>
