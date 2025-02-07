@@ -48,21 +48,6 @@ Page d'ajout (/ajout) :
    - ajout des exercice
 Page profil (/profil) :
    - récupération des info de l'utilisateur
-
-## Foctionalitées à faire
-Page profil (/profilt) :
-   -Si l'utilisateur est assigné à plusieurs promos, on doit pouvoir voir toutes les promos.
-   Pour l'instant seule la première s'affiche.
-   -Finaliser la modification de mot de passe.
-Page acceuil Prof :
-Page d'ajout (/ajout):
-   -Pour l'instant on récupère uniquement les matières,faudrait récupérer chapitre/compétence et rajouter le fait que l'on peut masque ou non une  question (checkbox?)
-Page acceuil (/):
-   -Pour l'instant le menu déroulant récupère toutes les matières, il faudrait le restreindre à ceux de la promo de l'utilisateur 
-   -Le slide de cette page n'a pas de fonctionnalitée
-
----## 📈 Fonctionnalités Valider (acces dans index.js mis entre prarenthese)
-
 - page login('/login')
    - marche intégralement
 - page register('/register')
@@ -77,7 +62,17 @@ Page acceuil (/):
    - sauvegarde des tentatives
    - verification des reponses des propositions
 
-## 📈 Fonctionnalités a Ajouter (acces dans index.js mis entre prarenthese)
+## Foctionalitées à faire
+Page profil (/profilt) :
+   -Si l'utilisateur est assigné à plusieurs promos, on doit pouvoir voir toutes les promos.
+   Pour l'instant seule la première s'affiche.
+   -Finaliser la modification de mot de passe.
+Page acceuil Prof :
+Page d'ajout (/ajout):
+   -Pour l'instant on récupère uniquement les matières,faudrait récupérer chapitre/compétence et rajouter le fait que l'on peut masque ou non une  question (checkbox?)
+Page acceuil (/):
+   -Pour l'instant le menu déroulant récupère toutes les matières, il faudrait le restreindre à ceux de la promo de l'utilisateur 
+   -Le slide de cette page n'a pas de fonctionnalitée
 
 - Menu déroulant ('/')
    - Affichage des pages profs pour les profs
